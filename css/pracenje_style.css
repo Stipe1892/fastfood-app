@@ -1,0 +1,81 @@
+/* Opći stilovi */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #ffefd5;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Puni visinu viewport-a */
+    
+  }
+  
+  /* Header stil */
+  header {
+    background: #ff4500;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+  }
+  
+  header nav a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Glavni dio stranice */
+  main {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .tracking-section {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tracking-info {
+    text-align: center;
+  }
+  
+  .tracking-image {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+    object-fit: contain;
+  }
+  
+  .tracking-text {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #333;
+  }
+  
+  .estimated-time {
+    font-size: 20px;
+    font-weight: bold;
+    color: #ff4500;
+  }
+  
+  footer {
+    margin-top: auto; /* Ovo će gurati footer na dno */
+    text-align: center;
+    padding: 10px;
+    background: #ff4500;
+    color: #fff;
+    width: 100%;
+  }
+  

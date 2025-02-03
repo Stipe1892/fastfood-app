@@ -13,24 +13,7 @@ const users = [];
 
 // Ruta za prikaz registracijske forme
 app.get("/", (req, res) => {
-  res.send(`
-    <h1>Registracija</h1>
-    <form action="/register" method="POST">
-      <label for="username">Korisničko ime:</label>
-      <input type="text" id="username" name="username" required><br>
-
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required><br>
-
-      <label for="password">Lozinka:</label>
-      <input type="password" id="password" name="password" required><br>
-
-      <label for="confirm-password">Potvrda lozinke:</label>
-      <input type="password" id="confirm-password" name="confirm-password" required><br>
-
-      <button type="submit">Registriraj se</button>
-    </form>
-  `);
+  res.send(`Registracija HTML forma`);
 });
 
 // Ruta za registraciju korisnika

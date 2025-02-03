@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plaćanje | Fast Food</title>
+  <link rel="stylesheet" href="../css/placanje_style.css">
+  <script defer src="../js/cart.js"></script>
+  <style>
+    /* Stilovi za ikonu u gornjem desnom kutu */
+    #user-icon {
+      position: absolute;
+      top: 10px;  /* Povećajte ovo za pomicanje ikone više */
+      right: 25%; /* Centriranje ikone */
+      width: 40px;
+      height: 40px;
+      background-image: url('../images/icon.png'); /* Zamijenite s odgovarajućom putanjom za ikonu */
+      background-size: cover;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Kontrola za ikonu i gumb za odjavu */
+    #user-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      flex-direction: column; /* Postavljamo ikonu i gumb u vertikalni red */
+      align-items: center; /* Poravnanje na sredinu */
+    }
+
+    #logout-btn {
+      margin-top: 50px; /* Povećan razmak između gumba i ikone */
+      background: none;
+      border: none;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold; /* Gumb za odjavu bit će podebljan */
+      text-align: center;
+    }
+
+    /* Stil za prikaz osobnih podataka */
+    #user-info {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      text-align: center;
+    }
+
+    #user-info h3 {
+      margin-top: 0;
+    }
+
+    #user-info p {
+      margin: 10px 0;
+    }
+
+    #user-info input {
+      margin: 10px 0;
+      padding: 8px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #user-info button {
+      padding: 10px;
+      background-color: #ff4500;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #user-info button:hover {
+      background-color: #e03e00;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Plaćanje</h1>
+    <nav>
+      <a href="index.html">Početna</a>
+      <a href="menu.html">Meni</a>
+      <a href="cart.html">Košarica</a>
+    </nav>
+    
+    <!-- Ikona korisnika i gumb za odjavu -->
+    <div id="user-controls">
+      <div id="user-icon"></div> <!-- Ikona je sada povise i desno od gumba -->
+      <button id="logout-btn">Odjava</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="category">
+      <h2>Unesite podatke za plaćanje</h2>
+      
+      <!-- Forma za unos podataka o kartici -->
+      <form action="#" method="POST" id="payment-form">
+        
+        <div class="form-group card-icons">
+          <!-- Ikone kartica, sada obje stoje lijevo, jedna pored druge -->
+          <img src="../images/visa.jpg" alt="Visa" class="card-icon">
+          <img src="../images/mastercard.jpg" alt="MasterCard" class="card-icon">
+        </div>
+
+        <div class="form-group">
+          <label for="card-number">Broj kartice:</label>
+          <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9876 5432" required maxlength="19" pattern="^[0-9]{16,19}$" title="Broj kartice mora sadržavati samo brojeve (16-19 cifara)">
+          <div class="error-message" id="card-number-error">Broj kartice mora sadržavati samo brojeve (16-19 znamenki).</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="expiry-date">Datum isteka:</label>
+          <input type="month" id="expiry-date" name="expiry-date" required min="2025-01">
+          <div class="error-message" id="expiry-date-error">Datum isteka mora biti najranije 01/2025.</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="ccv">CCV:</label>
+          <input type="text" id="ccv" name="ccv" placeholder="123" required maxlength="3" pattern="^[0-9]{3}$" title="CCV mora biti broj s 3 znamenke">
+          <div class="error-message" id="ccv-error">CCV mora biti troznamenkasti broj.</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="name">Ime i Prezime:</label>
+          <input type="text" id="name" name="name" placeholder="John Doe" required pattern="^[A-Za-z\s]+$" title="Ime i prezime smije sadržavati samo slova i razmake">
+          <div class="error-message" id="name-error">Ime i prezime smije sadržavati samo slova i razmake.</div>
+        </div>
+
+        <!-- Dugme za praćenje narudžbe koje vodi na 'pracenje.html' -->
+        <button type="submit" id="track-order-btn" class="pay-btn">Završite Plaćanje</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Modal za prikaz osobnih podataka -->
+  <div id="user-info" style="display: none;">
+    <h3>Osobni podaci</h3>
+    <p id="user-username">Korisničko ime: </p>
+    <p id="user-email">Email: </p>
+    <p id="user-phone">Broj mobitela: </p>
+    <p id="user-address">Adresa: </p>
+    <button onclick="closeUserInfo()">Zatvori</button>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Fast Food.</p>
+  </footer>
+
+  <script>
+    // Funkcija za prikaz osobnih podataka
+    document.getElementById("user-icon").addEventListener("click", function () {
+      const loggedInUser = localStorage.getItem("loggedInUser");
+
+      if (loggedInUser) {
+        const user = JSON.parse(loggedInUser);
+
+        // Prikaz podataka korisnika
+        document.getElementById("user-username").textContent =
+        `Korisničko ime: ${user.username}`;
+        document.getElementById("user-email").textContent =
+          `Email: ${user.email}`;
+        document.getElementById("user-phone").textContent =
+          `Broj mobitela: ${user.phoneNumber}`;
+          document.getElementById("user-address").textContent = 
+          "Adresa: " + 
+          (user.street || "N/A") + " " + 
+          (user.houseNumber || "N/A") + ", " + 
+          (user.city || "N/A") + ", " + 
+          (user.postalCode || "N/A");
+
+        document.getElementById("user-info").style.display = "block";
+      } else {
+        alert("Niste prijavljeni. Molimo prijavite se kako biste vidjeli podatke.");
+      }
+    });
+
+    // Funkcija za zatvaranje modalnog prozora
+    function closeUserInfo() {
+      document.getElementById("user-info").style.display = "none";
+    }
+
+    // Validacija forme za plaćanje
+    const paymentForm = document.getElementById("payment-form");
+    paymentForm.addEventListener("submit", function (event) {
+      let isValid = true;
+
+      // Provjera broja kartice
+      const cardNumberInput = document.getElementById("card-number");
+      if (!cardNumberInput.value.match(/^[0-9]{16,19}$/)) {
+        cardNumberInput.classList.add("invalid");
+        document.getElementById("card-number-error").style.display = "block";
+        isValid = false;
+      } else {
+        cardNumberInput.classList.remove("invalid");
+        document.getElementById("card-number-error").style.display = "none";
+      }
+
+      // Provjera datuma isteka
+      const expiryDateInput = document.getElementById("expiry-date");
+      const currentDate = new Date();
+      const expiryDate = new Date(expiryDateInput.value);
+      if (expiryDate < currentDate) {
+        expiryDateInput.classList.add("invalid");
+        document.getElementById("expiry-date-error").style.display = "block";
+        isValid = false;
+      } else {
+        expiryDateInput.classList.remove("invalid");
+        document.getElementById("expiry-date-error").style.display = "none";
+      }
+
+      // Provjera CCV-a
+      const ccvInput = document.getElementById("ccv");
+      if (!ccvInput.value.match(/^[0-9]{3}$/)) {
+        ccvInput.classList.add("invalid");
+        document.getElementById("ccv-error").style.display = "block";
+        isValid = false;
+      } else {
+        ccvInput.classList.remove("invalid");
+        document.getElementById("ccv-error").style.display = "none";
+      }
+
+      // Provjera imena i prezimena
+      const nameInput = document.getElementById("name");
+      if (!nameInput.value.match(/^[A-Za-z\s]+$/)) {
+        nameInput.classList.add("invalid");
+        document.getElementById("name-error").style.display = "block";
+        isValid = false;
+      } else {
+        nameInput.classList.remove("invalid");
+        document.getElementById("name-error").style.display = "none";
+      }
+
+      // Ako validacija ne uspije, zaustavi slanje forme
+      if (!isValid) {
+        event.preventDefault();
+      } else {
+        // Ako je sve ispravno, preusmjeri na pracenje.html
+        event.preventDefault(); // Spriječiti defaultno ponašanje forme
+        window.location.href = "pracenje.html";
+      }
+    });
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Praćenje Narudžbe | Fast Food</title>
+  <link rel="stylesheet" href="../css/pracenje_style.css">
+  <style>
+    /* Stilovi za ikonu u gornjem desnom kutu */
+    #user-icon {
+      position: absolute;
+      top: 0px;  
+      right: 3%; 
+      width: 40px;
+      height: 40px;
+      background-image: url('../images/icon.png');
+      background-size: cover;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    #user-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center; 
+    }
+
+    #logout-btn {
+      margin-top: 50px;
+      background: none;
+      border: none;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Modal za prikaz osobnih podataka */
+    #user-info {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      text-align: center;
+      z-index: 1000;  /* Pozicionira modal ispred svih drugih elemenata */
+      background-color: rgba(255, 255, 255, 0.9); /* Poluproziran bijeli background */
+    }
+
+    #user-info h3 {
+      margin-top: 0;
+    }
+
+    #user-info p {
+      margin: 10px 0;
+    }
+
+    #user-info input {
+      margin: 10px 0;
+      padding: 8px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #user-info button {
+      padding: 10px;
+      background-color: #ff4500;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #user-info button:hover {
+      background-color: #e03e00;
+    }
+
+    /* Novi okvir s sivim obrubom i uža širina za račun - pomaknut skroz lijevo */
+    .invoice-section {
+      margin-top: 20px;
+      border: 1px solid #888;  
+      background-color: white;  
+      padding: 15px;
+      border-radius: 10px;
+      width: 35%;  /* Širina duplo manja */
+      margin-left: 0; /* Pomaknuto skroz lijevo */
+      transform: scale(0.9);  
+    }
+
+    .invoice-section h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .invoice-section #invoice-details {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Praćenje Narudžbe</h1>
+    <nav>
+      <a href="index.html">Početna</a>
+      <a href="menu.html">Meni</a>
+      <a href="cart.html">Košarica</a>
+      <a href="povjest.html">Povijest Narudžbe</a> 
+    </nav>
+  </header>
+
+  <!-- Ikona korisnika i gumb za odjavu -->
+  <div id="user-controls">
+    <div id="user-icon"></div>
+    <button id="logout-btn">Odjava</button>
+  </div>
+
+  <!-- Modal za prikaz osobnih podataka -->
+  <div id="user-info" style="display: none;">
+    <h3>Osobni podaci</h3>
+    <p id="user-username">Korisničko ime: </p>
+    <p id="user-email">Email: </p>
+    <p id="user-phone">Broj mobitela: </p>
+    <p id="user-address">Adresa: </p>
+    <button onclick="closeUserInfo()">Zatvori</button>
+  </div>
+
+  <main>
+    <section class="tracking-section">
+      <div class="tracking-info">
+        <img src="../images/sat.png" alt="Sat" class="tracking-image">
+        <p class="tracking-text">Vaša narudžba je trenutno u obradi.</p>
+        <p class="estimated-time">Očekivano vrijeme dostave: <strong>25 minuta</strong></p>
+      </div>
+    </section>
+
+    <section class="invoice-section">
+      <h2>Račun Narudžbe</h2>
+      <div id="invoice-details">
+        <!-- Detalji računa i datum vremena kupovine će biti prikazani ovdje -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Fast Food.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Provjera da li postoji spremljena košarica
+      const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+      let totalPrice = 0;
+
+      // Izračunavanje ukupne cijene
+      cartData.forEach(item => {
+        totalPrice += item.price;
+      });
+
+      const invoiceDetails = document.getElementById("invoice-details");
+
+      const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleDateString();
+      const formattedTime = currentDate.toLocaleTimeString();
+
+      // Dohvaćanje napomene iz localStorage
+      const orderNote = localStorage.getItem('Napomena');  // Prikazivanje napomene pohranjenje pod 'Napomena'
+
+      // Provjera da li je košarica prazna
+      if (cartData.length > 0) {
+        const orderItems = cartData.map(item => {
+          return `<p><strong>${item.name}</strong> - ${item.price.toFixed(2)} €</p>`;
+        }).join(" ");
+
+        let invoiceHtml = `  
+          <h3>Stavke narudžbe:</h3>
+          ${orderItems}
+        `;
+
+        // Dodavanje napomene ispod stavki narudžbe
+        if (orderNote && orderNote.trim() !== '') {
+          invoiceHtml += `<p><strong>Napomena:</strong> ${orderNote}</p>`;
+        }
+
+        invoiceHtml += `
+          <hr>
+          <p><strong>Datum: ${formattedDate}</strong></p>
+          <p><strong>Vrijeme: ${formattedTime}</strong></p>
+          <p><strong>Ukupno: ${totalPrice.toFixed(2)} €</strong></p>
+        `;
+
+        invoiceDetails.innerHTML = invoiceHtml;
+
+        // Spremanje narudžbe u povijest (localStorage)
+        const order = {
+          timestamp: currentDate.getTime(), // Sprema vrijeme kao timestamp
+          items: cartData,
+          totalPrice: totalPrice,
+          note: orderNote
+        };
+
+        // Dohvaćanje povijesti narudžbi iz localStorage
+        const purchaseHistory = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
+
+        // Dodavanje nove narudžbe u povijest
+        purchaseHistory.push(order);
+
+        // Pohranjivanje ažurirane povijesti narudžbi
+        localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
+
+        // Logout funkcionalnost
+        document.getElementById('logout-btn').addEventListener('click', function() {
+          localStorage.removeItem('cart');  // Brisanje košarice (možeš i korisničke podatke)
+          window.location.href = 'login.html';   // Preusmjeravanje na stranicu za prijavu
+        });
+      } else {
+        invoiceDetails.innerHTML = "<p>Košarica je prazna.</p>";
+      }
+    });
+  </script>
+</body>
+</html>

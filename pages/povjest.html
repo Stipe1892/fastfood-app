@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Povijest Narudžbi | Fast Food</title>
+  <link rel="stylesheet" href="../css/cart_style.css">
+  <style>
+    .purchase-item {
+      border: 2px solid black;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .purchase-item h3 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    .purchase-item p {
+      margin: 5px 0;
+    }
+
+    .purchase-item ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Povijest Narudžbi</h1>
+    <nav>
+      <a href="index.html">Početna</a>
+      <a href="menu.html">Meni</a>
+    </nav>
+  </header>
+  <main>
+    <section class="history-section">
+      <h2>Vaša povijest kupovine</h2>
+      <div id="purchase-history"></div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Fast Food.</p>
+  </footer>
+
+  <script>
+    function getPurchaseHistory() {
+      const history = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
+      return history;
+    }
+
+    function displayPurchaseHistory() {
+      const history = getPurchaseHistory();
+      const historyContainer = document.getElementById("purchase-history");
+
+      if (history.length === 0) {
+        historyContainer.innerHTML = "<p>Nemate povijest kupovine.</p>";
+        return;
+      }
+
+      const reversedHistory = history.reverse();
+
+      historyContainer.innerHTML = reversedHistory.map(order => {
+        const date = new Date(order.timestamp);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString();
+
+        return `
+          <div class="purchase-item">
+            <h3>Račun - ${formattedDate} u ${formattedTime}</h3>
+            <p><strong>Ukupno: </strong>${order.totalPrice.toFixed(2)} €</p>
+            <p><strong>Napomena:</strong> ${order.note}</p>
+            <h4>Stavke narudžbe:</h4>
+            <ul>
+              ${order.items.map(item => `<li>${item.name} - ${item.price.toFixed(2)} €</li>`).join("")}
+            </ul>
+          </div>
+        `;
+      }).join("");
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      displayPurchaseHistory();
+    });
+  </script>
+</body>
+</html>

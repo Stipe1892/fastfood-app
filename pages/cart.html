@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Košarica | Fast Food</title>
-  <link rel="stylesheet" href="../css/menu_style.css">
+  <link rel="stylesheet" href="../css/cart_style.css">
   <script defer src="../js/cart.js"></script>
 </head>
 <body>
@@ -12,26 +12,46 @@
     <h1>Pregled Košarice</h1>
     <nav>
       <a href="index.html">Početna</a>
-      <a href="cart.html">Košarica</a>
+      <a href="menu.html">Meni</a>
+      <a href="povjest.html">Povijest Narudžbi</a>
     </nav>
   </header>
   <main>
     <section class="category">
       <h2>Stavke u Košarici</h2>
       <div id="cart-items">
-        <!-- Primjer stavke -->
+        <!-- Stavke iz košarice bit će prikazane ovdje -->
         <div class="cart-item">
           <p>Naziv proizvoda: Cheeseburger</p>
           <p>Cijena: 5.00 €</p>
+          <div class="toppings">
+            <p>Odabrani prilozi: Sir, Ketchup</p>
+          </div>
           <button class="remove-btn" onclick="removeItem(this)">Ukloni</button>
         </div>
         <div class="cart-item">
           <p>Naziv proizvoda: Pomfrit</p>
           <p>Cijena: 3.00 €</p>
+          <div class="toppings">
+            <p>Odabrani prilozi: Majoneza</p>
+          </div>
           <button class="remove-btn" onclick="removeItem(this)">Ukloni</button>
         </div>
       </div>
       <p id="total-price">Ukupno: 8.00 €</p>
+
+      <!-- Polje za napomenu -->
+      <div class="note-section">
+        <label for="note">Napomena za narudžbu:</label>
+        <textarea id="note" rows="4" placeholder="Upišite svoje napomene ovdje..."></textarea>
+      </div>
+
+      <p id="empty-cart-warning" style="display: none; color: red;">Košarica je prazna. Dodajte stavke u košaricu kako biste nastavili.</p>
+
+      <!-- Dugme za plaćanje -->
+      <a href="placanje.html">
+        <button id="payment-btn" class="pay-btn" disabled>Plaćanje</button>
+      </a>
     </section>
   </main>
   <footer>
@@ -41,32 +61,72 @@
   <script>
     // Funkcija za uklanjanje stavke iz košarice
     function removeItem(button) {
-      // Pronađi roditeljski element stavke (div.cart-item)
       const cartItem = button.parentElement;
-      
-      // Ukloni stavku iz DOM-a
       cartItem.remove();
-      
-      // Ponovno izračunaj ukupnu cijenu
       updateTotalPrice();
+      checkCart();
     }
 
-    // Funkcija za ažuriranje ukupne cijene
+    // Ažuriranje ukupne cijene
     function updateTotalPrice() {
       const cartItems = document.querySelectorAll('.cart-item');
       let total = 0;
 
       cartItems.forEach(item => {
-        const priceText = item.querySelector('p:nth-child(2)').innerText; // Npr. "Cijena: 5.00 €"
+        const priceText = item.querySelector('p:nth-child(2)').innerText;
         const price = parseFloat(priceText.replace('Cijena: ', '').replace('€', '').trim());
         total += price;
       });
 
-      // Ažuriraj prikaz ukupne cijene
       document.getElementById('total-price').innerText = `Ukupno: ${total.toFixed(2)} €`;
     }
+
+    // Provjera košarice
+    function checkCart() {
+      const cartItems = document.querySelectorAll('.cart-item');
+      const paymentBtn = document.getElementById('payment-btn');
+      const emptyCartWarning = document.getElementById('empty-cart-warning');
+      const totalPriceElement = document.getElementById('total-price');
+      const totalPrice = parseFloat(totalPriceElement.innerText.replace('Ukupno: ', '').replace('€', '').trim());
+
+      if (cartItems.length === 0 || totalPrice === 0) {
+        paymentBtn.disabled = true;
+        paymentBtn.parentElement.setAttribute('href', 'javascript:void(0);');
+        emptyCartWarning.style.display = 'block';
+      } else {
+        paymentBtn.disabled = false;
+        paymentBtn.parentElement.setAttribute('href', 'placanje.html');
+        emptyCartWarning.style.display = 'none';
+      }
+    }
+
+    // Spremanje napomene u localStorage ako je unesena
+    function saveNoteToLocalStorage() {
+      const note = document.getElementById('note').value.trim(); // Dohvaćanje napomene
+
+      // Ako je napomena unesena, spremamo je u localStorage
+      if (note !== '') {
+        localStorage.setItem('Napomena', note);
+      } else {
+        // Ako napomena nije unesena, uklanjamo ju iz localStorage
+        localStorage.removeItem('Napomena');
+      }
+    }
+
+    // Spremanje podataka iz košarice u localStorage kada korisnik klikne na gumb 'Plaćanje'
+    document.getElementById('payment-btn').addEventListener('click', function() {
+      saveNoteToLocalStorage();
+      window.location.href = 'placanje.html';
+    });
+
+    // Automatsko spremanje napomene u localStorage kad korisnik unese napomenu
+    document.getElementById('note').addEventListener('input', function() {
+      saveNoteToLocalStorage();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      checkCart();
+    });
   </script>
 </body>
 </html>
-
-

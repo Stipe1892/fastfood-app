@@ -7,11 +7,40 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(to bottom, #ff6347, #ff4500);
+    background: linear-gradient(to bottom, #ffa07a, #ff6347);
     color: #fff;
+    flex-direction: column; /* Omogućuje raspored headera, maina i footera vertikalno */
 }
 
-/* Kontejner za login formu */
+/* Header */
+header {
+    background: #ff4500;
+    padding: 20px;
+    color: #fff;
+    width: 100%;
+    position: fixed; /* Fiksira header na vrh */
+    top: 0; /* Pozicionira ga na vrh stranice */
+    left: 0;
+    z-index: 1000; /* Osigurava da je header uvijek iznad ostalih elemenata */
+    display: flex;
+    flex-direction: column; /* Vertikalno slaganje linkova */
+    justify-content: center; /* Centriranje linkova unutar headera */
+    align-items: center; /* Vertikalno poravnanje linkova */
+    text-align: center;
+}
+
+/* Linkovi u headeru */
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 10px 0; /* Razmak između linkova */
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+/* Login form */
 .login-container {
     background: #fff;
     color: #333;
@@ -23,16 +52,10 @@ body {
     text-align: center;
 }
 
-/* Naslov */
-.login-container h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #ff4500;
-}
-
-/* Input polja */
+/* Input fields and buttons */
 .login-container input[type="text"],
-.login-container input[type="password"] {
+.login-container input[type="password"],
+.login-container input[type="email"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -41,7 +64,6 @@ body {
     font-size: 16px;
 }
 
-/* Gumb za prijavu */
 .login-container button {
     background: #ff4500;
     color: #fff;
@@ -58,7 +80,7 @@ body {
     background: #e63900;
 }
 
-/* Link za zaboravljenu lozinku */
+/* Links */
 .login-container a {
     color: #ff4500;
     text-decoration: none;
@@ -69,9 +91,16 @@ body {
     text-decoration: underline;
 }
 
-/* Stil za mobilne uređaje */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
+/* Footer */
+footer {
+    background: #ff4500;
+    padding: 10px;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0; /* Fiksira footer na dnu */
+    left: 0;
 }
+
+

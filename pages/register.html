@@ -74,10 +74,7 @@
 
         localStorage.setItem("registeredUser", JSON.stringify(user));
 
-        // Postavljanje statusa prijave u localStorage
-        localStorage.setItem("isLoggedIn", "true");
-
-        displayMessage("Registracija uspješna! Sada ste prijavljeni.", "success");
+        displayMessage("Registracija uspješna! Sada se prijavite.", "success");
         setTimeout(() => {
           window.location.href = "index.html"; // Preusmjeravanje na početnu stranicu
         }, 2000); // Pričekaj 2 sekunde prije preusmjeravanja
@@ -100,7 +97,7 @@
     </nav>
   </header>
   <main>
-    <form action="submit_registration.html" method="POST" class="registration-form">
+    <form class="registration-form">
       <label for="username">Korisničko ime:</label>
       <input type="text" id="username" name="username" required>
 
@@ -138,6 +135,9 @@
   </footer>
 </body>
 </html>
+
+
+
 
 
 
