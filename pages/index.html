@@ -5,11 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dobrodošli | Fast Food</title>
   <link rel="stylesheet" href="../css/index_style.css">
+  <style>
+    /* Dropdown meni za korisničke opcije */
+    #user-menu {
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      background-color: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      width: 150px;
+      display: none; /* Skriven po defaultu */
+      border-radius: 5px;
+    }
+
+    #user-menu a {
+      display: block;
+      padding: 10px;
+      text-decoration: none;
+      color: black;
+      border-bottom: 1px solid #ddd;
+    }
+
+    #user-menu a:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Stil za prikaz osobnih podataka */
+    #user-info {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      text-align: center;
+    }
+
+    #user-info h3 {
+      margin-top: 0;
+    }
+
+    #user-info p {
+      margin: 10px 0;
+    }
+
+    #user-info input {
+      margin: 10px 0;
+      padding: 8px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #user-info button {
+      padding: 10px;
+      background-color: #ff4500;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #user-info button:hover {
+      background-color: #e03e00;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Dobrodošli u Fast Food 
-      Orange Rush!</h1>
+    <h1>Dobrodošli u Fast Food!</h1>
   </header>
 
   <main>
@@ -26,16 +95,102 @@
     <a href="#" id="change-password">Promjena lozinke</a>
     <a href="#" id="logout-btn">Odjava</a>
   </div>
+
+  <!-- Modal za prikaz i izmjenu osobnih podataka -->
+  <div id="user-info">
+    <h3>Osobni podaci</h3>
+    <form id="user-info-form">
+      <label for="username">Korisničko ime:</label>
+      <input type="text" id="username" placeholder="Unesite korisničko ime">
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Unesite email">
+
+      <label for="phone">Broj mobitela:</label>
+      <input type="tel" id="phone" placeholder="Unesite broj mobitela">
+
+      <label for="address">Adresa:</label>
+      <input type="text" id="address" placeholder="Unesite adresu">
+
+      <button type="submit">Spremi promjene</button>
+    </form>
+    <button onclick="closeUserInfo()">Zatvori</button>
+  </div>
+
   <footer>
-    <div>
-      <a href="o_nama.html">O nama</a>
-    </div>
-    <div>
-      &copy; Fast Food 2025.
-    </div>
+    <p>&copy; 2025 Fast Food.</p>
   </footer>
+
+  <script>
+    // Funkcija za prikaz osobnih podataka
+    document.getElementById("view-profile").addEventListener("click", function() {
+      const userInfoModal = document.getElementById("user-info");
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      
+      if (userData) {
+        document.getElementById("username").value = userData.username || "";
+        document.getElementById("email").value = userData.email || "";
+        document.getElementById("phone").value = userData.phone || "";
+        document.getElementById("address").value = userData.address || "";
+      }
+
+      userInfoModal.style.display = "block";
+      document.getElementById("user-menu").style.display = "none";
+    });
+
+    // Funkcija za promjenu lozinke
+    document.getElementById("change-password").addEventListener("click", function() {
+      const newPassword = prompt("Unesite novu lozinku:");
+      const confirmPassword = prompt("Potvrdite novu lozinku:");
+
+      if (newPassword === confirmPassword) {
+        const userData = JSON.parse(localStorage.getItem("userData"));
+        if (userData) {
+          userData.password = newPassword;
+          localStorage.setItem("userData", JSON.stringify(userData));
+          alert("Lozinka je uspješno promijenjena.");
+        }
+      } else {
+        alert("Lozinke se ne podudaraju.");
+      }
+
+      document.getElementById("user-menu").style.display = "none";
+    });
+
+    // Funkcija za odjavu korisnika
+    document.getElementById("logout-btn").addEventListener("click", function() {
+      localStorage.removeItem("userData");
+      alert("Odjavili ste se.");
+      window.location.href = "login.html";
+    });
+
+    // Funkcija za zatvaranje modala
+    function closeUserInfo() {
+      const userInfoModal = document.getElementById("user-info");
+      userInfoModal.style.display = "none";
+    }
+
+    // Funkcija za spremanje izmjena osobnih podataka
+    document.getElementById("user-info-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const address = document.getElementById("address").value;
+
+      // Pohranjivanje podataka u localStorage
+      const userData = {
+        username,
+        email,
+        phone,
+        address
+      };
+      localStorage.setItem("userData", JSON.stringify(userData));
+
+      alert("Podaci su uspješno spremljeni.");
+      closeUserInfo();
+    });
+  </script>
 </body>
 </html>
-
-
-

@@ -122,26 +122,6 @@ body {
     bottom: 0;
   }
   
-  .purchase-item {
-    border: 2px solid black;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-
-  .purchase-item h3 {
-    margin-top: 0;
-    font-size: 20px;
-  }
-
-  .purchase-item p {
-    margin: 5px 0;
-  }
-
-  .purchase-item ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
+  
   
   

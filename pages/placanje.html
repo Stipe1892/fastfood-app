@@ -6,6 +6,85 @@
   <title>Plaćanje | Fast Food</title>
   <link rel="stylesheet" href="../css/placanje_style.css">
   <script defer src="../js/cart.js"></script>
+  <style>
+    /* Stilovi za ikonu u gornjem desnom kutu */
+    #user-icon {
+      position: absolute;
+      top: 10px;  /* Povećajte ovo za pomicanje ikone više */
+      right: 25%; /* Centriranje ikone */
+      width: 40px;
+      height: 40px;
+      background-image: url('../images/icon.png'); /* Zamijenite s odgovarajućom putanjom za ikonu */
+      background-size: cover;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Kontrola za ikonu i gumb za odjavu */
+    #user-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      flex-direction: column; /* Postavljamo ikonu i gumb u vertikalni red */
+      align-items: center; /* Poravnanje na sredinu */
+    }
+
+    #logout-btn {
+      margin-top: 50px; /* Povećan razmak između gumba i ikone */
+      background: none;
+      border: none;
+      color: #000;
+      cursor: pointer;
+      font-weight: bold; /* Gumb za odjavu bit će podebljan */
+      text-align: center;
+    }
+
+    /* Stil za prikaz osobnih podataka */
+    #user-info {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      text-align: center;
+    }
+
+    #user-info h3 {
+      margin-top: 0;
+    }
+
+    #user-info p {
+      margin: 10px 0;
+    }
+
+    #user-info input {
+      margin: 10px 0;
+      padding: 8px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #user-info button {
+      padding: 10px;
+      background-color: #ff4500;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #user-info button:hover {
+      background-color: #e03e00;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -15,6 +94,12 @@
       <a href="menu.html">Meni</a>
       <a href="cart.html">Košarica</a>
     </nav>
+    
+    <!-- Ikona korisnika i gumb za odjavu -->
+    <div id="user-controls">
+      <div id="user-icon"></div> <!-- Ikona je sada povise i desno od gumba -->
+      <button id="logout-btn">Odjava</button>
+    </div>
   </header>
 
   <main>
@@ -60,7 +145,44 @@
     </section>
   </main>
 
+  <!-- Modal za prikaz osobnih podataka -->
+  <div id="user-info" style="display: none;">
+    <h3>Osobni podaci</h3>
+    <p id="user-username">Korisničko ime: </p>
+    <p id="user-email">Email: </p>
+    <p id="user-phone">Broj mobitela: </p>
+    <p id="user-address">Adresa: </p>
+    <button onclick="closeUserInfo()">Zatvori</button>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Fast Food.</p>
+  </footer>
+
   <script>
+    // Funkcija za prikaz osobnih podataka
+    document.getElementById("user-icon").addEventListener("click", function () {
+      const loggedInUser = localStorage.getItem("loggedInUser");
+
+      if (loggedInUser) {
+        const user = JSON.parse(loggedInUser);
+
+        // Prikaz podataka korisnika
+        document.getElementById("user-username").textContent =
+        `Korisničko ime: ${user.username}`;
+        document.getElementById("user-email").textContent =
+          `Email: ${user.email}`;
+        document.getElementById("user-phone").textContent =
+          `Broj mobitela: ${user.phone}`;
+        document.getElementById("user-address").textContent =
+          `Adresa: ${user.address}`;
+
+        document.getElementById("user-info").style.display = "block";
+      } else {
+        alert("Niste prijavljeni. Molimo prijavite se kako biste vidjeli podatke.");
+      }
+    });
+
     // Funkcija za zatvaranje modalnog prozora
     function closeUserInfo() {
       document.getElementById("user-info").style.display = "none";
