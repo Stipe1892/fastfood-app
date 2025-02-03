@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Košarica | Fast Food</title>
+  <link rel="stylesheet" href="../css/menu_style.css">
+  <script defer src="../js/cart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Pregled Košarice</h1>
+    <nav>
+      <a href="index.html">Početna</a>
+      <a href="cart.html">Košarica</a>
+    </nav>
+  </header>
+  <main>
+    <section class="category">
+      <h2>Stavke u Košarici</h2>
+      <div id="cart-items">
+        <!-- Primjer stavke -->
+        <div class="cart-item">
+          <p>Naziv proizvoda: Cheeseburger</p>
+          <p>Cijena: 5.00 €</p>
+          <button class="remove-btn" onclick="removeItem(this)">Ukloni</button>
+        </div>
+        <div class="cart-item">
+          <p>Naziv proizvoda: Pomfrit</p>
+          <p>Cijena: 3.00 €</p>
+          <button class="remove-btn" onclick="removeItem(this)">Ukloni</button>
+        </div>
+      </div>
+      <p id="total-price">Ukupno: 8.00 €</p>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Fast Food.</p>
+  </footer>
+
+  <script>
+    // Funkcija za uklanjanje stavke iz košarice
+    function removeItem(button) {
+      // Pronađi roditeljski element stavke (div.cart-item)
+      const cartItem = button.parentElement;
+      
+      // Ukloni stavku iz DOM-a
+      cartItem.remove();
+      
+      // Ponovno izračunaj ukupnu cijenu
+      updateTotalPrice();
+    }
+
+    // Funkcija za ažuriranje ukupne cijene
+    function updateTotalPrice() {
+      const cartItems = document.querySelectorAll('.cart-item');
+      let total = 0;
+
+      cartItems.forEach(item => {
+        const priceText = item.querySelector('p:nth-child(2)').innerText; // Npr. "Cijena: 5.00 €"
+        const price = parseFloat(priceText.replace('Cijena: ', '').replace('€', '').trim());
+        total += price;
+      });
+
+      // Ažuriraj prikaz ukupne cijene
+      document.getElementById('total-price').innerText = `Ukupno: ${total.toFixed(2)} €`;
+    }
+  </script>
+</body>
+</html>
+
+

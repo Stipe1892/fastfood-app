@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ponuda hrane | Fast Food</title>
+  <link rel="stylesheet" href="../css/menu_style.css">
+  <script defer src="../js/cart.js"></script>
+  <style>
+    /* Stilovi za ikonu u gornjem desnom kutu */
+    #user-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background-image: url('../images/icon.png');
+      background-size: cover;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    #user-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    #logout-btn {
+      margin-right: 10px; /* Prostor između gumba i ikone */
+      background: none;
+      border: none;
+      color: #000;
+      cursor: pointer;
+    }
+
+    /* Stil za prikaz osobnih podataka */
+    #user-info {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      text-align: center;
+    }
+
+    #user-info h3 {
+      margin-top: 0;
+    }
+
+    #user-info p {
+      margin: 10px 0;
+    }
+
+    #user-info input {
+      margin: 10px 0;
+      padding: 8px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #user-info button {
+      padding: 10px;
+      background-color: #ff4500;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #user-info button:hover {
+      background-color: #e03e00;
+    }
+
+    /* Stil za padajući izbornik */
+    #toppings-dropdown {
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+     padding: 10px;
+      width: 200px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      top: 50px; /* Podesite prema potrebama */
+      left: 0;
+      display: none; /* Početno skriveno */
+      z-index: 100;
+    }
+
+    #toppings-dropdown h4 {
+      margin-bottom: 10px;
+    }
+
+    #toppings-dropdown label {
+      display: flex;
+      margin-bottom: 5px;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Fast Food Ponuda</h1>
+    <nav>
+      <a href="index.html">Početna</a>
+      <a href="cart.html">Pregled košarice</a>
+    </nav>
+    <!-- Gumb Odjava i ikona prijave -->
+    <div id="user-controls">
+      <button id="logout-btn">Odjava</button>
+      <div id="user-icon"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="category">
+      <h2>Pizza</h2>
+      <div class="items">
+        <div class="item">
+          <img src="../images/margherita.jpg" alt="Pizza Margherita">
+          <h3>Margherita</h3>
+          <p>Klasična pizza sa sirom i rajčicom.</p>
+          <p>Cijena: 6,00 €</p>
+          <button class="add-to-cart" data-name="Margherita" data-price="6.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/capricciosa.jpg" alt="Pizza Capricciosa">
+          <h3>Capricciosa</h3>
+          <p>Šunka, gljive, sir, rajčice, masline.</p>
+          <p>Cijena: 7,50 €</p>
+          <button class="add-to-cart" data-name="Capricciosa" data-price="7.50">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/picante.jpg" alt="Pizza Picante">
+          <h3>Picante</h3>
+          <p>Sir, kulen, gljive, feferoni, vrhnje za kuhanje.</p>
+          <p>Cijena: 8,00 €</p>
+          <button class="add-to-cart" data-name="Picante" data-price="8.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/quattro.jpg" alt="Pizza Quattro">
+          <h3>Quattro Fromaggi</h3>
+          <p>Dimljeni sir, gouda, edamer, mozzarella, gongonzola, parmezan.</p>
+          <p>Cijena: 9,00 €</p>
+          <button class="add-to-cart" data-name="Quattro" data-price="9.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/mortadela.jpg" alt="Pizza Mortadela">
+          <h3>Mortadela i pistacchio</h3>
+          <p>Pesto od rikule, sir, mortadella, pistacchio.</p>
+          <p>Cijena: 10,00 €</p>
+          <button class="add-to-cart" data-name="Mortadella" data-price="10.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/Prsut.jpg" alt="Pizza Prsut">
+          <h3>Pršut</h3>
+          <p>Sir, maslinovo ulje, mozzarella, pršut, rikola.</p>
+          <p>Cijena: 8,50 €</p>
+          <button class="add-to-cart" data-name="Mortadella" data-price="8.50">Dodaj u košaricu</button>
+        </div>
+      </div>
+    </section>
+    <section class="category">
+      <h2>Burgeri</h2>
+      <div class="items">
+        <div class="item">
+          <img src="../images/cheeseburger.jpg" alt="Cheeseburger">
+          <h3>Cheeseburger</h3>
+          <p>Goveđi burger sa sirom, salatom i umakom.</p>
+          <p>Cijena: 5,50 €</p>
+          <button class="add-to-cart" data-name="Cheeseburger" data-price="5.50">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/double_bacon_burger.jpg" alt="Double Bacon Burger">
+          <h3>Double Bacon Burger</h3>
+          <p>Dupli burger sa slaninom, sirom i BBQ umakom.</p>
+          <p>Cijena: 7,00 €</p>
+          <button class="add-to-cart" data-name="Double Bacon Burger" data-price="7.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/truffleburger1.jpg" alt="Burger s tartufima">
+          <h3>Burger s tartufima</h3>
+          <p>Pljeskavica od govedine i dimljene slanine, džem od smokava, hrskavi luk, raclette sir i majoneza od tartufa.</p>
+          <p>Cijena: 8,50 €</p>
+          <button class="add-to-cart" data-name="Burger s tartufima" data-price="8.50">Dodaj u košaricu</button>
+        </div>
+      </div>
+    </section>
+    <section class="category">
+      <h2>Tortilje</h2>
+      <div class="items">
+      <div class="item">
+        <img src="../images/piletina.jpg" alt="Tortilja piletina">
+        <h3>Tortilja piletina</h3>
+        <p>Piletina, sir, prilozi po želji.</p>
+        <p>Cijena: 5,00 €</p>
+      
+        <button class="choose-toppings-btn">Odaberi priloge</button>
+      
+        <div class="toppings-dropdown" style="display: none;">
+          <h4>Odaberi priloge:</h4>
+          <label><input type="checkbox" class="topping-option" value="Kupus"> Kupus</label><br>
+          <label><input type="checkbox" class="topping-option" value="Salata"> Salata</label><br>
+          <label><input type="checkbox" class="topping-option" value="Luk"> Luk</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kiseli krastavci"> Kiseli krastavci</label><br>
+          <label><input type="checkbox" class="topping-option" value="Majoneza"> Majoneza</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kečap"> Kečap</label><br>
+          <label><input type="checkbox" class="topping-option" value="BBQ umak"> BBQ umak</label><br>
+          <label><input type="checkbox" class="topping-option" value="Jaja"> Jaja</label><br>
+          <label><input type="checkbox" class="topping-option" value="Rajčica"> Rajčica</label><br>
+          <button class="add-to-cart" data-name="Tortilja piletina" data-price="5.00">Dodaj u košaricu</button>
+        </div>
+      </div>
+      <div class="item">
+        <img src="../images/tuna.jpg" alt="Tortilja tuna">
+        <h3>Tortilja tuna</h3>
+        <p>Tuna, sir, prilozi po želji.</p>
+        <p>Cijena: 6,00 €</p>
+      
+        <button class="choose-toppings-btn">Odaberi priloge</button>
+      
+        <div class="toppings-dropdown" style="display: none;">
+          <h4>Odaberi priloge:</h4>
+          <label><input type="checkbox" class="topping-option" value="Kupus"> Kupus</label><br>
+          <label><input type="checkbox" class="topping-option" value="Salata"> Salata</label><br>
+          <label><input type="checkbox" class="topping-option" value="Luk"> Luk</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kiseli krastavci"> Kiseli krastavci</label><br>
+          <label><input type="checkbox" class="topping-option" value="Majoneza"> Majoneza</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kečap"> Kečap</label><br>
+          <label><input type="checkbox" class="topping-option" value="BBQ umak"> BBQ umak</label><br>
+          <label><input type="checkbox" class="topping-option" value="Jaja"> Jaja</label><br>
+          <label><input type="checkbox" class="topping-option" value="Rajčica"> Rajčica</label><br>
+          <button class="add-to-cart" data-name="Tortilja tuna" data-price="6.00">Dodaj u košaricu</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="category">
+      <h2>Roštilj</h2>
+      <div class="items">
+      <div class="item">
+        <img src="../images/pljeskavica.jpg" alt="Pljeskavica">
+        <h3>Pljeskavica</h3>
+        <p>Cijena: 5,00 €</p>
+      
+        <button class="choose-toppings-btn">Odaberi priloge</button>
+      
+        <div class="toppings-dropdown" style="display: none;">
+          <h4>Odaberi priloge:</h4>
+          <label><input type="checkbox" class="topping-option" value="Kupus"> Kupus</label><br>
+          <label><input type="checkbox" class="topping-option" value="Salata"> Salata</label><br>
+          <label><input type="checkbox" class="topping-option" value="Luk"> Luk</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kiseli krastavci"> Kiseli krastavci</label><br>
+          <label><input type="checkbox" class="topping-option" value="Majoneza"> Majoneza</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kečap"> Kečap</label><br>
+          <label><input type="checkbox" class="topping-option" value="BBQ umak"> BBQ umak</label><br>
+          <label><input type="checkbox" class="topping-option" value="Jaja"> Jaja</label><br>
+          <label><input type="checkbox" class="topping-option" value="Rajčica"> Rajčica</label><br>
+          <button class="add-to-cart" data-name="Pljeskavica" data-price="5.00">Dodaj u košaricu</button>
+        </div>
+      </div>
+      <div class="item">
+        <img src="../images/cevapi.jpg" alt="Cevapi1">
+        <h3>Ćevapi 5 kom</h3>
+        <p>Cijena: 6,00 €</p>
+      
+        <button class="choose-toppings-btn">Odaberi priloge</button>
+      
+        <div class="toppings-dropdown" style="display: none;">
+          <h4>Odaberi priloge:</h4>
+          <label><input type="checkbox" class="topping-option" value="Kajmak"> Kajmak</label><br>
+          <label><input type="checkbox" class="topping-option" value="Ajvar"> Ajvar</label><br>
+          <label><input type="checkbox" class="topping-option" value="Luk"> Luk</label><br>
+          <button class="add-to-cart" data-name="Cevapi1" data-price="6.00">Dodaj u košaricu</button>
+        </div>
+      </div>
+      <div class="item">
+        <img src="../images/cevapi2.jpg" alt="Cevapi2">
+        <h3>Ćevapi 10 kom</h3>
+        <p>Cijena: 8,00 €</p>
+      
+        <button class="choose-toppings-btn">Odaberi priloge</button>
+      
+        <div class="toppings-dropdown" style="display: none;">
+          <h4>Odaberi priloge:</h4>
+          <label><input type="checkbox" class="topping-option" value="Kajmak"> Kajmak</label><br>
+          <label><input type="checkbox" class="topping-option" value="Ajvar"> Ajvar</label><br>
+          <label><input type="checkbox" class="topping-option" value="Luk"> Luk</label><br>
+          <button class="add-to-cart" data-name="Cevapi2" data-price="8.00">Dodaj u košaricu</button>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section class="category">
+      <h2>Sendviči</h2>
+      <div class="items">
+      <div class="item">
+        <img src="../images/topli-sendvic.jpg" alt="Topli sendvic">
+        <h3>Topli sendvič</h3>
+        <p>Cijena: 3,00 €</p>
+      
+        <button class="choose-toppings-btn">Odaberi priloge</button>
+      
+        <div class="toppings-dropdown" style="display: none;">
+          <h4>Odaberi priloge:</h4>
+          <label><input type="checkbox" class="topping-option" value="Kupus"> Kupus</label><br>
+          <label><input type="checkbox" class="topping-option" value="Salata"> Salata</label><br>
+          <label><input type="checkbox" class="topping-option" value="Luk"> Luk</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kiseli krastavci"> Kiseli krastavci</label><br>
+          <label><input type="checkbox" class="topping-option" value="Majoneza"> Majoneza</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kečap"> Kečap</label><br>
+          <label><input type="checkbox" class="topping-option" value="BBQ umak"> BBQ umak</label><br>
+          <label><input type="checkbox" class="topping-option" value="Jaja"> Jaja</label><br>
+          <label><input type="checkbox" class="topping-option" value="Rajčica"> Rajčica</label><br>
+          <button class="add-to-cart" data-name="Topli sendvic" data-price="3.00">Dodaj u košaricu</button>
+        </div>
+      </div>
+      <div class="item">
+        <img src="../images/sendvic_tj.jpg" alt="Sendvic tijesto">
+        <h3>Topli sendvič u pizza tijestu</h3>
+        <p>Cijena: 4,00 €</p>
+      
+        <button class="choose-toppings-btn">Odaberi priloge</button>
+      
+        <div class="toppings-dropdown" style="display: none;">
+          <h4>Odaberi priloge:</h4>
+          <label><input type="checkbox" class="topping-option" value="Kupus"> Kupus</label><br>
+          <label><input type="checkbox" class="topping-option" value="Salata"> Salata</label><br>
+          <label><input type="checkbox" class="topping-option" value="Luk"> Luk</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kiseli krastavci"> Kiseli krastavci</label><br>
+          <label><input type="checkbox" class="topping-option" value="Majoneza"> Majoneza</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kečap"> Kečap</label><br>
+          <label><input type="checkbox" class="topping-option" value="BBQ umak"> BBQ umak</label><br>
+          <label><input type="checkbox" class="topping-option" value="Jaja"> Jaja</label><br>
+          <label><input type="checkbox" class="topping-option" value="Rajčica"> Rajčica</label><br>
+          <button class="add-to-cart" data-name="Sendvic tijesto" data-price="4.00">Dodaj u košaricu</button>
+        </div>
+      </div>
+      <div class="item">
+        <img src="../images/prsut_tj.jpg" alt="Topli sendvic prsut">
+        <h3>Topli sendvič u pizza tijestu s pršutom</h3>
+        <p>Cijena: 4,50 €</p>
+      
+        <button class="choose-toppings-btn">Odaberi priloge</button>
+      
+        <div class="toppings-dropdown" style="display: none;">
+          <h4>Odaberi priloge:</h4>
+          <label><input type="checkbox" class="topping-option" value="Kupus"> Kupus</label><br>
+          <label><input type="checkbox" class="topping-option" value="Salata"> Salata</label><br>
+          <label><input type="checkbox" class="topping-option" value="Luk"> Luk</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kiseli krastavci"> Kiseli krastavci</label><br>
+          <label><input type="checkbox" class="topping-option" value="Majoneza"> Majoneza</label><br>
+          <label><input type="checkbox" class="topping-option" value="Kečap"> Kečap</label><br>
+          <label><input type="checkbox" class="topping-option" value="BBQ umak"> BBQ umak</label><br>
+          <label><input type="checkbox" class="topping-option" value="Jaja"> Jaja</label><br>
+          <label><input type="checkbox" class="topping-option" value="Rajčica"> Rajčica</label><br>
+          <button class="add-to-cart" data-name="Topli sendvic prsut" data-price="4.50">Dodaj u košaricu</button>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section class="category">
+      <h2>Extras</h2>
+      <div class="items">
+        <div class="item">
+          <img src="../images/pomfrit.jpg" alt="Pomfrit">
+          <h3>Pomfrit</h3>
+          <p>Cijena: 1,50 €</p>
+          <button class="add-to-cart" data-name="Pomfrit" data-price="1.50">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/rings.jpg" alt="Onion">
+          <h3>Onion rings</h3>
+          <p>Cijena: 2,00 €</p>
+          <button class="add-to-cart" data-name="Onion" data-price="2.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/batat.jpg" alt="Batat">
+          <h3>Batat</h3>
+          <p>Cijena: 2,00 €</p>
+          <button class="add-to-cart" data-name="Batat" data-price="2.00">Dodaj u košaricu</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="category">
+      <h2>Piće</h2>
+      <div class="items">
+        <div class="item">
+          <img src="../images/kola.jpg" alt="Cola">
+          <h3>Coca-cola 0,33</h3>
+          <p>Cijena: 1,50 €</p>
+          <button class="add-to-cart" data-name="Cola" data-price="1.50">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/cola.jpg" alt="Cola2">
+          <h3>Coca-cola</h3>
+          <p>Cijena: 2,00 €</p>
+          <button class="add-to-cart" data-name="Cola2" data-price="2.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/fanta.jpg" alt="Fanta">
+          <h3>Fanta</h3>
+          <p>Cijena: 2,00 €</p>
+          <button class="add-to-cart" data-name="Fanta" data-price="2.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/voda.jpg" alt="Voda">
+          <h3>Voda</h3>
+          <p>Cijena: 1,00 €</p>
+          <button class="add-to-cart" data-name="Voda" data-price="1.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/jamnica.jpg" alt="Jamnica">
+          <h3>Jamnica</h3>
+          <p>Cijena: 1,00 €</p>
+          <button class="add-to-cart" data-name="Jamnica" data-price="1.00">Dodaj u košaricu</button>
+        </div>
+        <div class="item">
+          <img src="../images/zuja.jpg" alt="Ozujsko">
+          <h3>Ožujsko</h3>
+          <p>Cijena: 2,50 €</p>
+          <button class="add-to-cart" data-name="Ozujsko" data-price="2.50">Dodaj u košaricu</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal za prikaz i promjenu osobnih podataka -->
+  <div id="user-info">
+    <h3>Osobni podaci</h3>
+    <p id="user-username">Korisničko ime: </p>
+    <p id="user-email">Email: </p>
+    <p id="user-phone">Broj mobitela: </p>
+    <p id="user-address">Adresa: </p>
+    
+    <!-- Polja za promjenu lozinke i adrese -->
+    <h4>Promijeni lozinku</h4>
+    <input type="password" id="new-password" placeholder="Nova lozinka">
+    <input type="password" id="confirm-new-password" placeholder="Potvrdi novu lozinku">
+
+    <h4>Promijeni adresu</h4>
+    <input type="text" id="new-street" placeholder="Nova ulica">
+    <input type="text" id="new-house-number" placeholder="Novi kućni broj">
+    <input type="text" id="new-city" placeholder="Novi grad">
+    <input type="text" id="new-postal-code" placeholder="Novi poštanski broj">
+
+    <button onclick="saveChanges()">Spremi promjene</button>
+    <button onclick="closeUserInfo()">Zatvori</button>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Fast Food.</p>
+  </footer>
+
+  <script>
+    // Funkcija za prikaz osobnih podataka
+    document.getElementById("user-icon").addEventListener("click", function() {
+      const user = JSON.parse(localStorage.getItem("registeredUser"));
+      if (user) {
+        // Prikazivanje podataka
+        document.getElementById("user-username").textContent = "Korisničko ime: " + user.username;
+        document.getElementById("user-email").textContent = "Email: " + user.email;
+        document.getElementById("user-phone").textContent = "Broj mobitela: " + user.phoneNumber;
+        document.getElementById("user-address").textContent = "Adresa: " + user.street + " " + user.houseNumber + ", " + user.city + ", " + user.postalCode;
+
+        // Prepunjavamo inpute za promjenu lozinke i adrese
+        document.getElementById("new-street").value = user.street;
+        document.getElementById("new-house-number").value = user.houseNumber;
+        document.getElementById("new-city").value = user.city;
+        document.getElementById("new-postal-code").value = user.postalCode;
+
+        document.getElementById("user-info").style.display = "block";
+      } else {
+        alert("Niste prijavljeni.");
+      }
+    });
+
+    // Funkcija za spremanje promjena
+    function saveChanges() {
+      const user = JSON.parse(localStorage.getItem("registeredUser"));
+
+      const newPassword = document.getElementById("new-password").value;
+      const confirmPassword = document.getElementById("confirm-new-password").value;
+
+      const newStreet = document.getElementById("new-street").value;
+      const newHouseNumber = document.getElementById("new-house-number").value;
+      const newCity = document.getElementById("new-city").value;
+      const newPostalCode = document.getElementById("new-postal-code").value;
+
+      // Provjera da li se lozinke podudaraju
+      if (newPassword && newPassword !== confirmPassword) {
+        alert("Lozinke se ne podudaraju!");
+        return;
+      }
+
+      // Ažuriraj podatke korisnika
+      if (newPassword) user.password = newPassword;
+      if (newStreet) user.street = newStreet;
+      if (newHouseNumber) user.houseNumber = newHouseNumber;
+      if (newCity) user.city = newCity;
+      if (newPostalCode) user.postalCode = newPostalCode;
+
+      // Spremi ažurirane podatke u localStorage
+      localStorage.setItem("registeredUser", JSON.stringify(user));
+      
+      alert("Podaci su uspješno ažurirani!");
+
+      // Ažuriranje podataka u modalu
+      document.getElementById("user-address").textContent = "Adresa: " + user.street + " " + user.houseNumber + ", " + user.city + ", " + user.postalCode;
+      
+      closeUserInfo();
+    }
+
+    // Funkcija za zatvaranje prikaza podataka
+    function closeUserInfo() {
+      document.getElementById("user-info").style.display = "none";
+    }
+
+    // Funkcija za odjavu korisnika
+    document.getElementById("logout-btn").addEventListener("click", function() {
+      // Brisanje korisničkih podataka iz localStorage
+      localStorage.removeItem("registeredUser");
+
+      // Preusmjeravanje na početnu stranicu
+      window.location.href = "index.html"; // Možete promijeniti URL ako želite preusmjeriti na neku drugu stranicu
+    });
+
+    // Funkcija koja pokazuje padajući izbornik za odabir priloga
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+
+addToCartButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    // Prikazivanje padajućeg izbornika za priloge
+    const toppingsDropdown = this.nextElementSibling; // Odabiremo element koji je odmah nakon gumba
+    toppingsDropdown.style.display = 'block';
+  });
+});
+
+// Funkcija koja pokazuje padajući izbornik za odabir priloga
+const chooseToppingsButtons = document.querySelectorAll('.choose-toppings-btn');
+
+chooseToppingsButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    // Prikazivanje padajućeg izbornika za priloge
+    const toppingsDropdown = this.nextElementSibling; // Odabiremo element koji je odmah nakon gumba
+    toppingsDropdown.style.display = 'block';
+  });
+});
+
+// Funkcija za dodavanje priloga u košaricu
+const addToppingsButtons = document.querySelectorAll('.add-toppings-to-cart');
+
+addToppingsButtons.forEach(button => {
+  button.addEventListener('click', function() {
+    // Zatvoriti padajući izbornik
+    const toppingsDropdown = this.closest('.toppings-dropdown');
+    toppingsDropdown.style.display = 'none';
+
+    // Dohvatiti naziv proizvoda i cijenu
+    const itemName = this.closest('.item').querySelector('h3').textContent;
+    const itemPrice = parseFloat(this.closest('.item').querySelector('.choose-toppings-btn').getAttribute('data-price'));
+
+    // Dohvatiti odabrane priloge
+    const selectedToppings = [];
+    const toppingOptions = this.closest('.toppings-dropdown').querySelectorAll('.topping-option');
+    toppingOptions.forEach(option => {
+      if (option.checked) {
+        selectedToppings.push(option.value);
+      }
+    });
+
+    // Dodati proizvod s prilozima u košaricu (localStorage ili bilo koji drugi način)
+    const productWithToppings = {
+      name: itemName + " (" + selectedToppings.join(', ') + ")",
+      price: itemPrice + (selectedToppings.length * 0.5), // Dodajemo cijenu priloga
+      toppings: selectedToppings
+    };
+
+    // Spremiti proizvod u localStorage ili košaricu
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push(productWithToppings);
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Prikazivanje obavijesti da je proizvod dodan u košaricu
+    alert('Proizvod s prilozima je dodan u košaricu!');
+  });
+});
+  </script>
+</body>
+</html>

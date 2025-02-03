@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registracija | Fast Food</title>
+  <link rel="stylesheet" href="../css/registration_style.css">
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Provjera je li korisnik već registriran
+      if (localStorage.getItem("registeredUser")) {
+        alert("Već ste registrirani!");
+        window.location.href = "index.html"; // Preusmjeravanje na početnu stranicu
+      }
+
+      const form = document.querySelector(".registration-form");
+      const messageBox = document.getElementById("message-box");
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Sprječavanje defaultnog slanja forme
+
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirmPassword = document.getElementById("confirm-password").value.trim();
+        const postalCode = document.getElementById("postal-code").value.trim();
+        const city = document.getElementById("city").value.trim();
+        const street = document.getElementById("street").value.trim();
+        const houseNumber = document.getElementById("house-number").value.trim();
+        const phoneNumber = document.getElementById("phone-number").value.trim();
+
+        // Validacija korisničkog imena
+        if (username.length < 4) {
+          displayMessage("Korisničko ime mora imati najmanje 4 znaka.", "error");
+          return;
+        }
+
+        // Validacija emaila
+        if (!email.endsWith("@gmail.com")) {
+          displayMessage("Email mora sadržavati '@gmail.com'.", "error");
+          return;
+        }
+
+        // Validacija duljine lozinke
+        if (password.length < 8) {
+          displayMessage("Lozinka mora imati najmanje 8 znakova.", "error");
+          return;
+        }
+
+        // Provjera podudaranja lozinki
+        if (password !== confirmPassword) {
+          displayMessage("Lozinke se ne podudaraju! Molimo unesite ih ponovo.", "error");
+          document.getElementById("confirm-password").value = ""; // Resetiraj polje za potvrdu lozinke
+          return;
+        }
+
+        // Validacija obaveznih polja
+        if (!postalCode || !city || !street || !houseNumber || !phoneNumber) {
+          displayMessage("Sva polja su obavezna!", "error");
+          return;
+        }
+
+        // Spremanje podataka u localStorage
+        const user = {
+          username,
+          email,
+          password, // U pravom sustavu lozinke bi trebale biti šifrirane!
+          postalCode,
+          city,
+          street,
+          houseNumber,
+          phoneNumber,
+        };
+
+        localStorage.setItem("registeredUser", JSON.stringify(user));
+
+        // Postavljanje statusa prijave u localStorage
+        localStorage.setItem("isLoggedIn", "true");
+
+        displayMessage("Registracija uspješna! Sada ste prijavljeni.", "success");
+        setTimeout(() => {
+          window.location.href = "index.html"; // Preusmjeravanje na početnu stranicu
+        }, 2000); // Pričekaj 2 sekunde prije preusmjeravanja
+      });
+
+      // Funkcija za prikaz poruka
+      function displayMessage(message, type) {
+        messageBox.textContent = message;
+        messageBox.className = type;
+        messageBox.style.display = "block";
+      }
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Registracija</h1>
+    <nav>
+      <a href="index.html">Početna</a>
+    </nav>
+  </header>
+  <main>
+    <form action="submit_registration.html" method="POST" class="registration-form">
+      <label for="username">Korisničko ime:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="password">Lozinka:</label>
+      <input type="password" id="password" name="password" required>
+
+      <label for="confirm-password">Potvrda lozinke:</label>
+      <input type="password" id="confirm-password" name="confirm-password" required>
+
+      <label for="postal-code">Poštanski broj:</label>
+      <input type="text" id="postal-code" name="postal-code" required>
+
+      <label for="city">Grad:</label>
+      <input type="text" id="city" name="city" required>
+
+      <label for="street">Ulica:</label>
+      <input type="text" id="street" name="street" required>
+
+      <label for="house-number">Kućni broj:</label>
+      <input type="text" id="house-number" name="house-number" required>
+
+      <label for="phone-number">Broj mobitela:</label>
+      <input type="text" id="phone-number" name="phone-number" required>
+
+      <div id="message-box"></div>
+
+      <button type="submit">Registriraj se</button>
+    </form>
+  </main>
+  <footer>
+    <p>&copy; 2025 Fast Food.</p>
+  </footer>
+</body>
+</html>
+
+
+
+

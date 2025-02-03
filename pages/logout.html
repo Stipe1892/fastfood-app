@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odjava | Fast Food</title>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Brisanje korisničkih podataka iz localStorage
+      localStorage.removeItem("registeredUser");
+
+      // Preusmjeravanje na početnu stranicu nakon odjave
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 1000); // Pričekaj 1 sekundu prije preusmjeravanja
+    });
+  </script>
+</head>
+<body>
+  <h1>Odjavljeni ste</h1>
+  <p>Bit ćete preusmjereni na početnu stranicu.</p>
+</body>
+</html>

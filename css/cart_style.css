@@ -1,0 +1,85 @@
+/* Opći stilovi */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffefd5;
+  color: #333;
+}
+
+header {
+  background: #ff4500;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 15px;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#cart-items {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+#cart-items div {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Poravnava sadržaj vertikalno */
+}
+
+#cart-items div:last-child {
+  border-bottom: none;
+}
+
+#total-price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff4500;
+}
+
+/* Stil za gumb "Ukloni" */
+.remove-btn {
+  background-color: #ff6347; /* Svijetlo crvena boja */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Dodaj animaciju za hover efekt */
+}
+
+.remove-btn:hover {
+  background-color: #ff4500; /* Tamnija crvena boja kod prelaska miša */
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  background: #ff4500;
+  color: #fff;
+}

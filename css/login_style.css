@@ -1,0 +1,77 @@
+/* Opći stilovi */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, #ff6347, #ff4500);
+    color: #fff;
+}
+
+/* Kontejner za login formu */
+.login-container {
+    background: #fff;
+    color: #333;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Naslov */
+.login-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #ff4500;
+}
+
+/* Input polja */
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Gumb za prijavu */
+.login-container button {
+    background: #ff4500;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease;
+}
+
+.login-container button:hover {
+    background: #e63900;
+}
+
+/* Link za zaboravljenu lozinku */
+.login-container a {
+    color: #ff4500;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
+}
+
+/* Stil za mobilne uređaje */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+}

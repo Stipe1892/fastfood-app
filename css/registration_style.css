@@ -1,0 +1,92 @@
+/* Opći stilovi */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #ffa07a, #ff6347); /* Topli gradijent */
+  color: #fff;
+  display: flex;
+  flex-direction: column; /* Omogućuje raspored headera, maina i footera vertikalno */
+  min-height: 100vh; /* Osigurava da tijelo zauzima cijeli ekran */
+  text-align: center;
+}
+
+header {
+  background: #ff4500;
+  padding: 20px;
+  color: #fff;
+}
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 15px;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+/* Glavni sadržaj */
+main {
+  flex: 1; /* Omogućuje rastezanje glavnog sadržaja kako bi zauzeo sav preostali prostor */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Sadržaj ide prema vrhu */
+  padding: 20px;
+  box-sizing: border-box; /* Uključi padding u izračun dimenzija */
+  overflow-y: auto; /* Omogući scrollanje ako sadržaj prelazi visinu */
+}
+
+.registration-form {
+  background: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+  margin: 20px 0; /* Udaljenost između forme i headera/footera */
+}
+
+.registration-form label {
+  font-size: 14px;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.registration-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.registration-form button {
+  width: 100%;
+  padding: 10px;
+  background: #ff4500;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.registration-form button:hover {
+  background: #e63900;
+}
+
+/* Footer */
+footer {
+  background: #ff4500;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+}
+  
