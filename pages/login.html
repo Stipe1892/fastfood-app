@@ -24,14 +24,14 @@
 
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value.trim();
-        const registeredUser = localStorage.getItem("registeredUser");
+        const users = JSON.parse(localStorage.getItem("users")) || [];
 
-        if (!registeredUser) {
-          displayMessage("Nema registriranih korisnika. Molimo registrirajte se.", "error");
+        const user = users.find(u => u.email === email);
+
+        if (!user) {
+          displayMessage("Neispravan email!", "error");
           return;
         }
-
-        const user = JSON.parse(registeredUser);
 
         if (email !== user.email) {
           displayMessage("Neispravan email!", "error");
@@ -105,13 +105,3 @@
   </footer>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-

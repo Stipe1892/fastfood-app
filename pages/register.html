@@ -7,17 +7,16 @@
   <link rel="stylesheet" href="../css/registration_style.css">
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      // Provjera je li korisnik već registriran
-      if (localStorage.getItem("registeredUser")) {
-        alert("Već ste registrirani!");
-        window.location.href = "index.html"; // Preusmjeravanje na početnu stranicu
-      }
-
       const form = document.querySelector(".registration-form");
       const messageBox = document.getElementById("message-box");
 
+      // Provjera je li korisnik već registriran i omogućavanje pristupa register.html
+      if (localStorage.getItem("registeredUser")) {
+        console.log("Korisnik je već registriran, može pristupiti register.html");
+      }
+
       form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Sprječavanje defaultnog slanja forme
+        event.preventDefault();
 
         const username = document.getElementById("username").value.trim();
         const email = document.getElementById("email").value.trim();
@@ -29,58 +28,63 @@
         const houseNumber = document.getElementById("house-number").value.trim();
         const phoneNumber = document.getElementById("phone-number").value.trim();
 
-        // Validacija korisničkog imena
+        // Dohvati postojeće korisnike
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        if (users.some(user => user.email === email)) {
+          displayMessage("Već ste registrirani s ovim emailom.", "error");
+          return;
+        }
+
         if (username.length < 4) {
           displayMessage("Korisničko ime mora imati najmanje 4 znaka.", "error");
           return;
         }
 
-        // Validacija emaila
         if (!email.endsWith("@gmail.com")) {
           displayMessage("Email mora sadržavati '@gmail.com'.", "error");
           return;
         }
 
-        // Validacija duljine lozinke
         if (password.length < 8) {
           displayMessage("Lozinka mora imati najmanje 8 znakova.", "error");
           return;
         }
 
-        // Provjera podudaranja lozinki
         if (password !== confirmPassword) {
-          displayMessage("Lozinke se ne podudaraju! Molimo unesite ih ponovo.", "error");
-          document.getElementById("confirm-password").value = ""; // Resetiraj polje za potvrdu lozinke
+          displayMessage("Lozinke se ne podudaraju!", "error");
+          document.getElementById("confirm-password").value = "";
           return;
         }
 
-        // Validacija obaveznih polja
         if (!postalCode || !city || !street || !houseNumber || !phoneNumber) {
           displayMessage("Sva polja su obavezna!", "error");
           return;
         }
 
-        // Spremanje podataka u localStorage
+        // Spremanje novog korisnika
         const user = {
           username,
           email,
-          password, // U pravom sustavu lozinke bi trebale biti šifrirane!
+          password,
           postalCode,
           city,
           street,
           houseNumber,
-          phoneNumber,
+          phoneNumber
         };
 
-        localStorage.setItem("registeredUser", JSON.stringify(user));
+        // Odjava trenutnog korisnika prije registracije novog
+        localStorage.removeItem("loggedInUser");
 
-        displayMessage("Registracija uspješna! Sada se prijavite.", "success");
+        users.push(user);
+        localStorage.setItem("users", JSON.stringify(users));
+
+        displayMessage("Registracija uspješna!", "success");
         setTimeout(() => {
-          window.location.href = "index.html"; // Preusmjeravanje na početnu stranicu
-        }, 2000); // Pričekaj 2 sekunde prije preusmjeravanja
+          window.location.href = "index.html";
+        }, 2000);
       });
 
-      // Funkcija za prikaz poruka
       function displayMessage(message, type) {
         messageBox.textContent = message;
         messageBox.className = type;
@@ -94,6 +98,7 @@
     <h1>Registracija</h1>
     <nav>
       <a href="index.html">Početna</a>
+      <a href="login.html">Login</a>
     </nav>
   </header>
   <main>

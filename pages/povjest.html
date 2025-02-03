@@ -35,6 +35,7 @@
     <nav>
       <a href="index.html">Početna</a>
       <a href="menu.html">Meni</a>
+      <a href="pracenje.html">Praćenje Narudžbe</a>
     </nav>
   </header>
   <main>
@@ -54,34 +55,37 @@
     }
 
     function displayPurchaseHistory() {
-      const history = getPurchaseHistory();
-      const historyContainer = document.getElementById("purchase-history");
+  const history = getPurchaseHistory();
+  const historyContainer = document.getElementById("purchase-history");
 
-      if (history.length === 0) {
-        historyContainer.innerHTML = "<p>Nemate povijest kupovine.</p>";
-        return;
-      }
+  if (history.length === 0) {
+    historyContainer.innerHTML = "<p>Nemate povijest kupovine.</p>";
+    return;
+  }
 
-      const reversedHistory = history.reverse();
+  const reversedHistory = history.reverse();
 
-      historyContainer.innerHTML = reversedHistory.map(order => {
-        const date = new Date(order.timestamp);
-        const formattedDate = date.toLocaleDateString();
-        const formattedTime = date.toLocaleTimeString();
+  historyContainer.innerHTML = reversedHistory.map(order => {
+    const date = new Date(order.timestamp);
+    const formattedDate = date.toLocaleDateString();
+    const formattedTime = date.toLocaleTimeString();
 
-        return `
-          <div class="purchase-item">
-            <h3>Račun - ${formattedDate} u ${formattedTime}</h3>
-            <p><strong>Ukupno: </strong>${order.totalPrice.toFixed(2)} €</p>
-            <p><strong>Napomena:</strong> ${order.note}</p>
-            <h4>Stavke narudžbe:</h4>
-            <ul>
-              ${order.items.map(item => `<li>${item.name} - ${item.price.toFixed(2)} €</li>`).join("")}
-            </ul>
-          </div>
-        `;
-      }).join("");
-    }
+    // Ako je napomena null, undefined ili prazan string, prikazujemo "Nema napomene"
+    const noteText = order.note && order.note.trim() !== "" ? order.note : "Nema napomene";
+
+    return `
+      <div class="purchase-item">
+        <h3>Račun - ${formattedDate} u ${formattedTime}</h3>
+        <p><strong>Ukupno: </strong>${order.totalPrice.toFixed(2)} €</p>
+        <p><strong>Napomena:</strong> ${noteText}</p>
+        <h4>Stavke narudžbe:</h4>
+        <ul>
+          ${order.items.map(item => `<li>${item.name} - ${item.price.toFixed(2)} €</li>`).join("")}
+        </ul>
+      </div>
+    `;
+  }).join("");
+}
 
     document.addEventListener("DOMContentLoaded", function() {
       displayPurchaseHistory();

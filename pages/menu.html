@@ -547,7 +547,7 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-    const adminEmails = ["turjakluka@gmail.com", "lovrepleadin13@gmail.com"];
+    const adminEmails = ["turjakluka@gmail.com", "lovrepleadin13@gmail.com", "kreso11@gmail.com"];
     const loggedInUser = localStorage.getItem("loggedInUser");
     const isAdmin = loggedInUser && adminEmails.includes(JSON.parse(loggedInUser).email);
     let menuItems = JSON.parse(localStorage.getItem("menuItems")) || [];
@@ -742,16 +742,48 @@ document.querySelector('a[href="povjest.html"]').addEventListener('click', funct
     }
   });
 
-  // Funkcija za spremanje promjena
+ // Funkcija za prikaz osobnih podataka
+ document.getElementById("user-icon").addEventListener("click", function () {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+
+    if (loggedInUser) {
+      // Prikaz podataka samo za prijavljenog korisnika
+      const user = JSON.parse(loggedInUser);
+
+      document.getElementById("user-username").textContent = "Korisničko ime: " + user.username;
+      document.getElementById("user-email").textContent = "Email: " + user.email;
+      document.getElementById("user-phone").textContent = "Broj mobitela: " + (user.phoneNumber || "Nije uneseno");
+      document.getElementById("user-address").textContent = 
+        "Adresa: " + 
+        (user.street || "N/A") + " " + 
+        (user.houseNumber || "N/A") + ", " + 
+        (user.city || "N/A") + ", " + 
+        (user.postalCode || "N/A");
+
+      // Prepunjavamo inpute za promjenu lozinke i adrese
+      document.getElementById("new-street").value = user.street || "";
+      document.getElementById("new-house-number").value = user.houseNumber || "";
+      document.getElementById("new-city").value = user.city || "";
+      document.getElementById("new-postal-code").value = user.postalCode || "";
+
+      document.getElementById("user-info").style.display = "block";
+    } else {
+      // Ako korisnik nije prijavljen, preusmjeri ga na login.html
+      alert("Niste prijavljeni. Molimo prijavite se.");
+      window.location.href = "login.html";
+    }
+  });
+
   function saveChanges() {
     const loggedInUser = localStorage.getItem("loggedInUser");
 
     if (!loggedInUser) {
-      alert("Morate biti prijavljeni kako biste mogli mijenjati podatke.");
-      return;
+        alert("Morate biti prijavljeni kako biste mogli mijenjati podatke.");
+        return;
     }
 
-    const user = JSON.parse(loggedInUser);
+    let user = JSON.parse(loggedInUser);
+    let users = JSON.parse(localStorage.getItem("users")) || [];
 
     const newPassword = document.getElementById("new-password").value;
     const confirmPassword = document.getElementById("confirm-new-password").value;
@@ -763,8 +795,15 @@ document.querySelector('a[href="povjest.html"]').addEventListener('click', funct
 
     // Provjera da li se lozinke podudaraju
     if (newPassword && newPassword !== confirmPassword) {
-      alert("Lozinke se ne podudaraju!");
-      return;
+        alert("Lozinke se ne podudaraju!");
+        return;
+    }
+
+    // Pronađi korisnika u "users" arrayu
+    let userIndex = users.findIndex(u => u.email === user.email);
+    if (userIndex === -1) {
+        alert("Greška: Korisnik nije pronađen.");
+        return;
     }
 
     // Ažuriraj podatke korisnika
@@ -774,17 +813,22 @@ document.querySelector('a[href="povjest.html"]').addEventListener('click', funct
     if (newCity) user.city = newCity;
     if (newPostalCode) user.postalCode = newPostalCode;
 
-    // Spremi ažurirane podatke u localStorage
+    // Ažuriraj korisnika u users arrayu
+    users[userIndex] = user;
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Također ažuriraj "loggedInUser"
     localStorage.setItem("loggedInUser", JSON.stringify(user));
 
     alert("Podaci su uspješno ažurirani!");
 
-    // Ažuriranje podataka u modalu
-    document.getElementById("user-address").textContent = 
-      "Adresa: " + user.street + " " + user.houseNumber + ", " + user.city + ", " + user.postalCode;
+    // Ažuriranje prikaza adrese u modalu
+    document.getElementById("user-address").textContent =
+        "Adresa: " + user.street + " " + user.houseNumber + ", " + user.city + ", " + user.postalCode;
 
     closeUserInfo();
-  }
+}
+
 
   // Funkcija za zatvaranje prikaza podataka
   function closeUserInfo() {
