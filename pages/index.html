@@ -6,6 +6,30 @@
   <title>Dobrodošli | Fast Food</title>
   <link rel="stylesheet" href="../css/index_style.css">
   <style>
+    /* Postavke za fiksiranje footera na dnu */
+    body, html {
+      height: 100%;
+      margin: 0;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: #ff4500;
+      text-align: center;
+      padding: 20px 0;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column; /* Raspored elemenata vertikalno */
+      justify-content: center;
+      align-items: center;
+    }
+
+    footer div {
+      margin: 5px 0; /* Razmak između elemenata */
+    }
+
     /* Dropdown meni za korisničke opcije */
     #user-menu {
       position: absolute;
@@ -78,7 +102,8 @@
 </head>
 <body>
   <header>
-    <h1>Dobrodošli u Fast Food!</h1>
+    <h1>Dobrodošli u Fast Food 
+      Orange Rush!</h1>
   </header>
 
   <main>
@@ -118,7 +143,12 @@
   </div>
 
   <footer>
-    <p>&copy; 2025 Fast Food.</p>
+    <div>
+      <a href="o_nama.html">O nama</a>
+    </div>
+    <div>
+      &copy; Fast Food 2025.
+    </div>
   </footer>
 
   <script>
@@ -194,3 +224,6 @@
   </script>
 </body>
 </html>
+
+
+

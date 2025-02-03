@@ -463,6 +463,19 @@
 </footer>
 
 <script>
+  // Provjera korisničke prijave kada korisnik klikne na Povijest Narudžbi
+document.querySelector('a[href="povjest.html"]').addEventListener('click', function (event) {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+
+  if (!loggedInUser) {
+    // Ako korisnik nije prijavljen, blokiramo pristup i preusmjeravamo ga na login stranicu
+    alert("Morate biti prijavljeni da biste pristupili povijesti narudžbi.");
+    event.preventDefault();  // Sprječava akciju klika na link
+    window.location.href = "login.html"; // Preusmjerava korisnika na login stranicu
+  }
+});
+
+
   // Funkcija za prikaz osobnih podataka
   document.getElementById("user-icon").addEventListener("click", function () {
     const loggedInUser = localStorage.getItem("loggedInUser");

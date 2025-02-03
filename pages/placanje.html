@@ -173,9 +173,13 @@
         document.getElementById("user-email").textContent =
           `Email: ${user.email}`;
         document.getElementById("user-phone").textContent =
-          `Broj mobitela: ${user.phone}`;
-        document.getElementById("user-address").textContent =
-          `Adresa: ${user.address}`;
+          `Broj mobitela: ${user.phoneNumber}`;
+          document.getElementById("user-address").textContent = 
+          "Adresa: " + 
+          (user.street || "N/A") + " " + 
+          (user.houseNumber || "N/A") + ", " + 
+          (user.city || "N/A") + ", " + 
+          (user.postalCode || "N/A");
 
         document.getElementById("user-info").style.display = "block";
       } else {

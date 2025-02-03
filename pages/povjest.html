@@ -63,7 +63,7 @@
       localStorage.setItem("purchaseHistory", JSON.stringify(history));
     }
 
-    // Funkcija za prikaz povijesti kupovine na stranici
+    // Funkcija za prikaz povijesti kupovine na stranici (s najnovijim narudžbama na vrhu)
     function displayPurchaseHistory() {
       const history = getPurchaseHistory();
       const historyContainer = document.getElementById("purchase-history");
@@ -73,7 +73,10 @@
         return;
       }
 
-      historyContainer.innerHTML = history.map(order => {
+      // Obrni niz kako bi najnovije narudžbe bile na vrhu
+      const reversedHistory = history.reverse();
+
+      historyContainer.innerHTML = reversedHistory.map(order => {
         const date = new Date(order.timestamp);
         const formattedDate = date.toLocaleDateString();
         const formattedTime = date.toLocaleTimeString();

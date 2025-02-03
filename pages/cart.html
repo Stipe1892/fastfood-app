@@ -134,7 +134,8 @@
       const orderData = {
         items: cartData,
         note: note,
-        totalPrice: totalPrice
+        totalPrice: totalPrice,
+        timestamp: new Date().toISOString() // Dodajemo timestamp za praćenje kada je narudžba napravljena
       };
 
       // Spremi podatke o narudžbi u localStorage
@@ -154,3 +155,4 @@
   </script>
 </body>
 </html>
+
