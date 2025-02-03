@@ -6,166 +6,6 @@
   <title>Ponuda hrane | Fast Food</title>
   <link rel="stylesheet" href="../css/menu_style.css">
   <script defer src="../js/cart.js"></script>
-  <style>
-    /* Dodatni stilovi za administraciju */
-.add-item {
-  color: #ff4500;
-  font-size: 24px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-.add-item:hover {
-  color: #e03e00;
-}
-
-#add-item-modal {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  width: 400px;
-  z-index: 1000;
-}
-
-#add-item-modal input,
-#add-item-modal textarea {
-  width: 100%;
-  margin: 10px 0;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-#add-item-modal button {
-  background-color: #ff4500;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  width: 100%;
-  margin-top: 10px;
-}
-
-#add-item-modal button:hover {
-  background-color: #e03e00;
-}
-
-/* Stilovi za ikonu u gornjem desnom kutu */
-#user-icon {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background-image: url('../images/icon.png');
-  background-size: cover;
-  cursor: pointer;
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-#user-controls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-#logout-btn {
-  margin-right: 10px; /* Prostor između gumba i ikone */
-  background: none;
-  border: none;
-  color: #000;
-  cursor: pointer;
-}
-
-/* Stil za prikaz osobnih podataka */
-#user-info {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-  width: 300px;
-  text-align: center;
-}
-
-#user-info h3 {
-  margin-top: 0;
-}
-
-#user-info p {
-  margin: 10px 0;
-}
-
-#user-info input {
-  margin: 10px 0;
-  padding: 8px;
-  width: 80%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-#user-info button {
-  padding: 10px;
-  background-color: #ff4500;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-#user-info button:hover {
-  background-color: #e03e00;
-}
-
-/* Stil za padajući izbornik */
-#toppings-dropdown {
-  position: absolute;
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 200px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  top: 50px; /* Podesite prema potrebama */
-  left: 0;
-  display: none; /* Početno skriveno */
-  z-index: 100;
-}
-
-#toppings-dropdown h4 {
-  margin-bottom: 10px;
-}
-
-#toppings-dropdown label {
-  display: flex;
-  margin-bottom: 5px;
-}
-
-#add-item-modal label,
-#toppings-dropdown label {
-  display: inline-flex;
-  align-items: center;
-  margin-bottom: 5px;
-}
-
-#add-item-modal input[type="checkbox"],
-#toppings-dropdown input[type="checkbox"] {
-  margin-right: 10px; /* Razmak između checkboxa i naziva */
-}
-
-
-  </style>
 </head>
 <body>
   <header>
@@ -174,6 +14,7 @@
       <a href="index.html">Početna</a>
       <a href="cart.html">Pregled košarice</a>
       <a href="povjest.html">Povijest Narudžbi</a>
+      <a href="pracenje.html">Praćenje Narudžbe</a>
     </nav>
     <div id="user-controls">
       <button id="logout-btn">Odjava</button>
@@ -514,7 +355,7 @@
     document.getElementById("cancel-item-btn").addEventListener("click", function () {
         document.getElementById("add-item-modal").style.display = "none";
     });
-</script>
+  </script>
 
 
   <!-- Modal za prikaz i promjenu osobnih podataka -->
@@ -709,38 +550,17 @@ document.querySelector('a[href="povjest.html"]').addEventListener('click', funct
   }
 });
 
+ // Provjera korisničke prijave kada korisnik klikne na Povijest Narudžbi
+ document.querySelector('a[href="pracenje.html"]').addEventListener('click', function (event) {
+  const loggedInUser = localStorage.getItem("loggedInUser");
 
-  // Funkcija za prikaz osobnih podataka
-  document.getElementById("user-icon").addEventListener("click", function () {
-    const loggedInUser = localStorage.getItem("loggedInUser");
-
-    if (loggedInUser) {
-      // Prikaz podataka samo za prijavljenog korisnika
-      const user = JSON.parse(loggedInUser);
-
-      document.getElementById("user-username").textContent = "Korisničko ime: " + user.username;
-      document.getElementById("user-email").textContent = "Email: " + user.email;
-      document.getElementById("user-phone").textContent = "Broj mobitela: " + (user.phoneNumber || "Nije uneseno");
-      document.getElementById("user-address").textContent = 
-        "Adresa: " + 
-        (user.street || "N/A") + " " + 
-        (user.houseNumber || "N/A") + ", " + 
-        (user.city || "N/A") + ", " + 
-        (user.postalCode || "N/A");
-
-      // Prepunjavamo inpute za promjenu lozinke i adrese
-      document.getElementById("new-street").value = user.street || "";
-      document.getElementById("new-house-number").value = user.houseNumber || "";
-      document.getElementById("new-city").value = user.city || "";
-      document.getElementById("new-postal-code").value = user.postalCode || "";
-
-      document.getElementById("user-info").style.display = "block";
-    } else {
-      // Ako korisnik nije prijavljen, preusmjeri ga na login.html
-      alert("Niste prijavljeni. Molimo prijavite se.");
-      window.location.href = "login.html";
-    }
-  });
+  if (!loggedInUser) {
+    // Ako korisnik nije prijavljen, blokiramo pristup i preusmjeravamo ga na login stranicu
+    alert("Morate biti prijavljeni da biste pristupili praenju narudžbi.");
+    event.preventDefault();  // Sprječava akciju klika na link
+    window.location.href = "login.html"; // Preusmjerava korisnika na login stranicu
+  }
+});
 
  // Funkcija za prikaz osobnih podataka
  document.getElementById("user-icon").addEventListener("click", function () {

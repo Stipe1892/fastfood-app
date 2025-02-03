@@ -131,3 +131,160 @@ footer {
 body {
   padding-bottom: 50px; /* Povećajte prema visini footera */
 }
+
+/* Dodatni stilovi za administraciju */
+.add-item {
+  color: #ff4500;
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.add-item:hover {
+  color: #e03e00;
+}
+
+#add-item-modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  z-index: 1000;
+}
+
+#add-item-modal input,
+#add-item-modal textarea {
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#add-item-modal button {
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+#add-item-modal button:hover {
+  background-color: #e03e00;
+}
+
+/* Stilovi za ikonu u gornjem desnom kutu */
+#user-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background-image: url('../images/icon.png');
+  background-size: cover;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#user-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#logout-btn {
+  margin-right: 10px; /* Prostor između gumba i ikone */
+  background: none;
+  border: none;
+  color: #000;
+  cursor: pointer;
+}
+
+/* Stil za prikaz osobnih podataka */
+#user-info {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  text-align: center;
+}
+
+#user-info h3 {
+  margin-top: 0;
+}
+
+#user-info p {
+  margin: 10px 0;
+}
+
+#user-info input {
+  margin: 10px 0;
+  padding: 8px;
+  width: 80%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#user-info button {
+  padding: 10px;
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#user-info button:hover {
+  background-color: #e03e00;
+}
+
+/* Stil za padajući izbornik */
+#toppings-dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 200px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  top: 50px; /* Podesite prema potrebama */
+  left: 0;
+  display: none; /* Početno skriveno */
+  z-index: 100;
+}
+
+#toppings-dropdown h4 {
+  margin-bottom: 10px;
+}
+
+#toppings-dropdown label {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+#add-item-modal label,
+#toppings-dropdown label {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+#add-item-modal input[type="checkbox"],
+#toppings-dropdown input[type="checkbox"] {
+  margin-right: 10px; /* Razmak između checkboxa i naziva */
+}

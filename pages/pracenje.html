@@ -5,107 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Praćenje Narudžbe | Fast Food</title>
   <link rel="stylesheet" href="../css/pracenje_style.css">
-  <style>
-    /* Stilovi za ikonu u gornjem desnom kutu */
-    #user-icon {
-      position: absolute;
-      top: 0px;  
-      right: 3%; 
-      width: 40px;
-      height: 40px;
-      background-image: url('../images/icon.png');
-      background-size: cover;
-      cursor: pointer;
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
-
-    #user-controls {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center; 
-    }
-
-    #logout-btn {
-      margin-top: 50px;
-      background: none;
-      border: none;
-      color: #000;
-      cursor: pointer;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    /* Modal za prikaz osobnih podataka */
-    #user-info {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-      width: 300px;
-      text-align: center;
-      z-index: 1000;  /* Pozicionira modal ispred svih drugih elemenata */
-      background-color: rgba(255, 255, 255, 0.9); /* Poluproziran bijeli background */
-    }
-
-    #user-info h3 {
-      margin-top: 0;
-    }
-
-    #user-info p {
-      margin: 10px 0;
-    }
-
-    #user-info input {
-      margin: 10px 0;
-      padding: 8px;
-      width: 80%;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    #user-info button {
-      padding: 10px;
-      background-color: #ff4500;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #user-info button:hover {
-      background-color: #e03e00;
-    }
-
-    /* Novi okvir s sivim obrubom i uža širina za račun - pomaknut skroz lijevo */
-    .invoice-section {
-      margin-top: 20px;
-      border: 1px solid #888;  
-      background-color: white;  
-      padding: 15px;
-      border-radius: 10px;
-      width: 35%;  /* Širina duplo manja */
-      margin-left: 0; /* Pomaknuto skroz lijevo */
-      transform: scale(0.9);  
-    }
-
-    .invoice-section h2 {
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-
-    .invoice-section #invoice-details {
-      font-size: 16px;
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -122,16 +21,6 @@
   <div id="user-controls">
     <div id="user-icon"></div>
     <button id="logout-btn">Odjava</button>
-  </div>
-
-  <!-- Modal za prikaz osobnih podataka -->
-  <div id="user-info" style="display: none;">
-    <h3>Osobni podaci</h3>
-    <p id="user-username">Korisničko ime: </p>
-    <p id="user-email">Email: </p>
-    <p id="user-phone">Broj mobitela: </p>
-    <p id="user-address">Adresa: </p>
-    <button onclick="closeUserInfo()">Zatvori</button>
   </div>
 
   <main>
@@ -151,81 +40,219 @@
     </section>
   </main>
 
+    <!-- Modal za prikaz i promjenu osobnih podataka -->
+  <div id="user-info" style="display: none;">
+    <h3>Osobni podaci</h3>
+    <p id="user-username">Korisničko ime: </p>
+    <p id="user-email">Email: </p>
+    <p id="user-phone">Broj mobitela: </p>
+    <p id="user-address">Adresa: </p>
+    
+    <!-- Polja za promjenu lozinke i adrese -->
+    <h4>Promijeni lozinku</h4>
+    <input type="password" id="new-password" placeholder="Nova lozinka">
+    <input type="password" id="confirm-new-password" placeholder="Potvrdi novu lozinku">
+  
+    <h4>Promijeni adresu</h4>
+    <input type="text" id="new-street" placeholder="Nova ulica">
+    <input type="text" id="new-house-number" placeholder="Novi kućni broj">
+    <input type="text" id="new-city" placeholder="Novi grad">
+    <input type="text" id="new-postal-code" placeholder="Novi poštanski broj">
+  
+    <button onclick="saveChanges()">Spremi promjene</button>
+    <button onclick="closeUserInfo()">Zatvori</button>
+    </div>
+
+
   <footer>
     <p>&copy; 2025 Fast Food.</p>
   </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Provjera da li postoji spremljena košarica
-      const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
-      let totalPrice = 0;
+  // Provjera da li postoji spremljena košarica
+  const cartData = JSON.parse(localStorage.getItem("cart") || "[]");
+  let totalPrice = 0;
 
-      // Izračunavanje ukupne cijene
-      cartData.forEach(item => {
-        totalPrice += item.price;
-      });
+  // Izračunavanje ukupne cijene
+  cartData.forEach(item => {
+    totalPrice += item.price;
+  });
 
-      const invoiceDetails = document.getElementById("invoice-details");
+  const invoiceDetails = document.getElementById("invoice-details");
+  const trackingInfo = document.querySelector('.tracking-info'); // Dodajemo referencu na sekciju za praćenje narudžbe
 
-      const currentDate = new Date();
-      const formattedDate = currentDate.toLocaleDateString();
-      const formattedTime = currentDate.toLocaleTimeString();
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString();
+  const formattedTime = currentDate.toLocaleTimeString();
 
-      // Dohvaćanje napomene iz localStorage
-      const orderNote = localStorage.getItem('Napomena');  // Prikazivanje napomene pohranjenje pod 'Napomena'
+  // Dohvaćanje napomene iz localStorage
+  const orderNote = localStorage.getItem('Napomena');  // Prikazivanje napomene pohranjenje pod 'Napomena'
 
-      // Provjera da li je košarica prazna
-      if (cartData.length > 0) {
-        const orderItems = cartData.map(item => {
-          return `<p><strong>${item.name}</strong> - ${item.price.toFixed(2)} €</p>`;
-        }).join(" ");
+  // Provjera da li je košarica prazna
+  if (cartData.length > 0) {
+    const orderItems = cartData.map(item => {
+      return `<p><strong>${item.name}</strong> - ${item.price.toFixed(2)} €</p>`;
+    }).join(" ");
 
-        let invoiceHtml = `  
-          <h3>Stavke narudžbe:</h3>
-          ${orderItems}
-        `;
+    let invoiceHtml = `  
+      <h3>Stavke narudžbe:</h3>
+      ${orderItems}
+    `;
 
-        // Dodavanje napomene ispod stavki narudžbe
-        if (orderNote && orderNote.trim() !== '') {
-          invoiceHtml += `<p><strong>Napomena:</strong> ${orderNote}</p>`;
-        }
+    // Dodavanje napomene ispod stavki narudžbe
+    if (orderNote && orderNote.trim() !== '') {
+      invoiceHtml += `<p><strong>Napomena:</strong> ${orderNote}</p>`;
+    }
 
-        invoiceHtml += `
-          <hr>
-          <p><strong>Datum: ${formattedDate}</strong></p>
-          <p><strong>Vrijeme: ${formattedTime}</strong></p>
-          <p><strong>Ukupno: ${totalPrice.toFixed(2)} €</strong></p>
-        `;
+    invoiceHtml += `
+      <hr>
+      <p><strong>Datum: ${formattedDate}</strong></p>
+      <p><strong>Vrijeme: ${formattedTime}</strong></p>
+      <p><strong>Ukupno: ${totalPrice.toFixed(2)} €</strong></p>
+    `;
 
-        invoiceDetails.innerHTML = invoiceHtml;
+    invoiceDetails.innerHTML = invoiceHtml;
 
-        // Spremanje narudžbe u povijest (localStorage)
-        const order = {
-          timestamp: currentDate.getTime(), // Sprema vrijeme kao timestamp
-          items: cartData,
-          totalPrice: totalPrice,
-          note: orderNote
-        };
+    // Spremanje narudžbe u povijest (localStorage)
+    const order = {
+      timestamp: currentDate.getTime(), // Sprema vrijeme kao timestamp
+      items: cartData,
+      totalPrice: totalPrice,
+      note: orderNote
+    };
 
-        // Dohvaćanje povijesti narudžbi iz localStorage
-        const purchaseHistory = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
+    // Dohvaćanje povijesti narudžbi iz localStorage
+    const purchaseHistory = JSON.parse(localStorage.getItem("purchaseHistory")) || [];
 
-        // Dodavanje nove narudžbe u povijest
-        purchaseHistory.push(order);
+    // Dodavanje nove narudžbe u povijest
+    purchaseHistory.push(order);
 
-        // Pohranjivanje ažurirane povijesti narudžbi
-        localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
+    // Pohranjivanje ažurirane povijesti narudžbi
+    localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
 
-        // Logout funkcionalnost
-        document.getElementById('logout-btn').addEventListener('click', function() {
-          localStorage.removeItem('cart');  // Brisanje košarice (možeš i korisničke podatke)
-          window.location.href = 'login.html';   // Preusmjeravanje na stranicu za prijavu
-        });
-      } else {
-        invoiceDetails.innerHTML = "<p>Košarica je prazna.</p>";
-      }
+    // **Isprazni košaricu i napomenu nakon spremanja narudžbe u povijest**
+    localStorage.removeItem("cart");  // Briši košaricu iz localStorage
+    localStorage.removeItem("Napomena");  // Briši napomenu iz localStorage
+
+    // Logout funkcionalnost
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      localStorage.removeItem('cart');  // Brisanje košarice (možeš i korisničke podatke)
+      window.location.href = 'login.html';   // Preusmjeravanje na stranicu za prijavu
     });
+  } else {
+    // Ako je košarica prazna, prikazuje novu poruku
+    trackingInfo.innerHTML = `
+      <img src="../images/sat.png" alt="Sat" class="tracking-image">
+      <p class="tracking-text">Niste napravili narudžbu. Molimo dodajte artikle u košaricu!</p>
+    `;
+    invoiceDetails.innerHTML = "<p>Košarica je prazna.</p>";
+  }
+  });
+
+ // Funkcija za prikaz osobnih podataka
+ document.getElementById("user-icon").addEventListener("click", function () {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+
+    if (loggedInUser) {
+      // Prikaz podataka samo za prijavljenog korisnika
+      const user = JSON.parse(loggedInUser);
+
+      document.getElementById("user-username").textContent = "Korisničko ime: " + user.username;
+      document.getElementById("user-email").textContent = "Email: " + user.email;
+      document.getElementById("user-phone").textContent = "Broj mobitela: " + (user.phoneNumber || "Nije uneseno");
+      document.getElementById("user-address").textContent = 
+        "Adresa: " + 
+        (user.street || "N/A") + " " + 
+        (user.houseNumber || "N/A") + ", " + 
+        (user.city || "N/A") + ", " + 
+        (user.postalCode || "N/A");
+
+      // Prepunjavamo inpute za promjenu lozinke i adrese
+      document.getElementById("new-street").value = user.street || "";
+      document.getElementById("new-house-number").value = user.houseNumber || "";
+      document.getElementById("new-city").value = user.city || "";
+      document.getElementById("new-postal-code").value = user.postalCode || "";
+
+      document.getElementById("user-info").style.display = "block";
+    } else {
+      // Ako korisnik nije prijavljen, preusmjeri ga na login.html
+      alert("Niste prijavljeni. Molimo prijavite se.");
+      window.location.href = "login.html";
+    }
+  });
+
+  function saveChanges() {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+
+    if (!loggedInUser) {
+        alert("Morate biti prijavljeni kako biste mogli mijenjati podatke.");
+        return;
+    }
+
+    let user = JSON.parse(loggedInUser);
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    const newPassword = document.getElementById("new-password").value;
+    const confirmPassword = document.getElementById("confirm-new-password").value;
+
+    const newStreet = document.getElementById("new-street").value;
+    const newHouseNumber = document.getElementById("new-house-number").value;
+    const newCity = document.getElementById("new-city").value;
+    const newPostalCode = document.getElementById("new-postal-code").value;
+
+    // Provjera da li se lozinke podudaraju
+    if (newPassword && newPassword !== confirmPassword) {
+        alert("Lozinke se ne podudaraju!");
+        return;
+    }
+
+    // Pronađi korisnika u "users" arrayu
+    let userIndex = users.findIndex(u => u.email === user.email);
+    if (userIndex === -1) {
+        alert("Greška: Korisnik nije pronađen.");
+        return;
+    }
+
+    // Ažuriraj podatke korisnika
+    if (newPassword) user.password = newPassword;
+    if (newStreet) user.street = newStreet;
+    if (newHouseNumber) user.houseNumber = newHouseNumber;
+    if (newCity) user.city = newCity;
+    if (newPostalCode) user.postalCode = newPostalCode;
+
+    // Ažuriraj korisnika u users arrayu
+    users[userIndex] = user;
+    localStorage.setItem("users", JSON.stringify(users));
+
+    // Također ažuriraj "loggedInUser"
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+    alert("Podaci su uspješno ažurirani!");
+
+    // Ažuriranje prikaza adrese u modalu
+    document.getElementById("user-address").textContent =
+        "Adresa: " + user.street + " " + user.houseNumber + ", " + user.city + ", " + user.postalCode;
+
+    closeUserInfo();
+  }
+
+
+  // Funkcija za zatvaranje prikaza podataka
+  function closeUserInfo() {
+    document.getElementById("user-info").style.display = "none";
+  }
+
+  // Funkcija za odjavu korisnika
+  document.getElementById("logout-btn").addEventListener("click", function () {
+    // Uklanjanje podataka o prijavi
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("rememberMe");
+
+    // Preusmjeravanje na login.html
+    window.location.href = "login.html";
+  });
+
   </script>
 </body>
 </html>
