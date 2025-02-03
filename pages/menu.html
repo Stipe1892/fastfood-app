@@ -167,7 +167,7 @@
       <div id="user-icon"></div>
     </div>
   </header>
-
+  
   <main>
     <!-- Dinamične kategorije -->
     <div id="categories">
@@ -485,8 +485,6 @@
         </div>
       </section>
     </main>
-  
-
   <!-- Modal za dodavanje novih stavki -->
   <div id="add-item-modal">
     <h3>Dodaj novu stavku</h3>
@@ -500,95 +498,125 @@
 
   <!-- Modal za prikaz i promjenu osobnih podataka -->
   <div id="user-info" style="display: none;">
-  <h3>Osobni podaci</h3>
-  <p id="user-username">Korisničko ime: </p>
-  <p id="user-email">Email: </p>
-  <p id="user-phone">Broj mobitela: </p>
-  <p id="user-address">Adresa: </p>
+    <h3>Osobni podaci</h3>
+    <p id="user-username">Korisničko ime: </p>
+    <p id="user-email">Email: </p>
+    <p id="user-phone">Broj mobitela: </p>
+    <p id="user-address">Adresa: </p>
+    
+    <!-- Polja za promjenu lozinke i adrese -->
+    <h4>Promijeni lozinku</h4>
+    <input type="password" id="new-password" placeholder="Nova lozinka">
+    <input type="password" id="confirm-new-password" placeholder="Potvrdi novu lozinku">
   
-  <!-- Polja za promjenu lozinke i adrese -->
-  <h4>Promijeni lozinku</h4>
-  <input type="password" id="new-password" placeholder="Nova lozinka">
-  <input type="password" id="confirm-new-password" placeholder="Potvrdi novu lozinku">
-
-  <h4>Promijeni adresu</h4>
-  <input type="text" id="new-street" placeholder="Nova ulica">
-  <input type="text" id="new-house-number" placeholder="Novi kućni broj">
-  <input type="text" id="new-city" placeholder="Novi grad">
-  <input type="text" id="new-postal-code" placeholder="Novi poštanski broj">
-
-  <button onclick="saveChanges()">Spremi promjene</button>
-  <button onclick="closeUserInfo()">Zatvori</button>
-  </div>
+    <h4>Promijeni adresu</h4>
+    <input type="text" id="new-street" placeholder="Nova ulica">
+    <input type="text" id="new-house-number" placeholder="Novi kućni broj">
+    <input type="text" id="new-city" placeholder="Novi grad">
+    <input type="text" id="new-postal-code" placeholder="Novi poštanski broj">
+  
+    <button onclick="saveChanges()">Spremi promjene</button>
+    <button onclick="closeUserInfo()">Zatvori</button>
+    </div>
+  
 
 <footer>
   <p>&copy; 2025 Fast Food.</p>
 </footer>
 
   <script>
-    const adminEmails = ["turjakluka@gmail.com", "lovrepleadin13@gmail.com"];
-
     document.addEventListener("DOMContentLoaded", function () {
-      const loggedInUser = localStorage.getItem("loggedInUser");
-      const isAdmin = loggedInUser && adminEmails.includes(JSON.parse(loggedInUser).email);
+  const adminEmails = ["turjak@gmail.com", "lovrepleadin13@gmail.com"];
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  const isAdmin = loggedInUser && adminEmails.includes(JSON.parse(loggedInUser).email);
+  let menuItems = JSON.parse(localStorage.getItem("menuItems")) || [];
 
-      // Prikazivanje opcije za administraciju
-      if (isAdmin) {
-        document.querySelectorAll(".add-item").forEach((el) => el.style.display = "inline");
+  function renderMenu() {
+    document.querySelectorAll(".category .items").forEach(el => el.innerHTML = "");
+
+    menuItems.forEach(item => {
+      const categoryContainer = document.querySelector(`.category[data-category="${item.category}"] .items`);
+      if (categoryContainer) {
+        const newItem = document.createElement("div");
+        newItem.className = "item";
+        newItem.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <p>${item.description}</p>
+          <p>Cijena: ${item.price} €</p>
+          <button class="add-to-cart" data-name="${item.name}" data-price="${item.price}">Dodaj u košaricu</button>
+          ${isAdmin ? `<button class="remove-item" data-name="${item.name}">Ukloni</button>` : ""}
+        `;
+        categoryContainer.appendChild(newItem);
       }
+    });
 
-      // Dodavanje nove stavke
-      const addItemButtons = document.querySelectorAll(".add-item");
-      const addItemModal = document.getElementById("add-item-modal");
-      const saveItemBtn = document.getElementById("save-item-btn");
-      const cancelItemBtn = document.getElementById("cancel-item-btn");
+    if (isAdmin) {
+      document.querySelectorAll(".add-item").forEach(el => el.style.display = "inline");
+    }
+  }
 
-      addItemButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-          addItemModal.style.display = "block";
-          addItemModal.dataset.category = this.closest(".category").dataset.category;
-        });
-      });
+  renderMenu();
 
-      cancelItemBtn.addEventListener("click", function () {
-        addItemModal.style.display = "none";
-      });
-
-      saveItemBtn.addEventListener("click", function () {
-        const category = addItemModal.dataset.category;
-        const name = document.getElementById("new-item-name").value;
-        const description = document.getElementById("new-item-description").value;
-        const price = parseFloat(document.getElementById("new-item-price").value).toFixed(2);
-        const imageInput = document.getElementById("new-item-image");
-        const reader = new FileReader();
-
-        if (!name || !description || !price || !imageInput.files[0]) {
-          alert("Molimo ispunite sva polja i odaberite sliku.");
-          return;
-        }
-
-        reader.onload = function (e) {
-          const newItem = document.createElement("div");
-          newItem.className = "item";
-          newItem.innerHTML = `
-            <img src="${e.target.result}" alt="${name}">
-            <h3>${name}</h3>
-            <p>${description}</p>
-            <p>Cijena: ${price} €</p>
-            <button class="add-to-cart" data-name="${name}" data-price="${price}">Dodaj u košaricu</button>
-          `;
-
-          document.querySelector(`.category[data-category="${category}"] .items`).appendChild(newItem);
-          addItemModal.style.display = "none";
-
-          alert("Proizvod uspješno dodan.");
-        };
-
-        reader.readAsDataURL(imageInput.files[0]);
+  if (isAdmin) {
+    document.querySelectorAll(".add-item").forEach(button => {
+      button.addEventListener("click", function () {
+        const category = this.closest(".category").dataset.category;
+        document.getElementById("add-item-modal").dataset.category = category;
+        document.getElementById("add-item-modal").style.display = "block";
       });
     });
 
-    // Provjera korisničke prijave kada korisnik klikne na Povijest Narudžbi
+    document.getElementById("save-item-btn").addEventListener("click", function () {
+      const category = document.getElementById("add-item-modal").dataset.category;
+      const name = document.getElementById("new-item-name").value;
+      const description = document.getElementById("new-item-description").value;
+      const price = parseFloat(document.getElementById("new-item-price").value).toFixed(2);
+      const imageInput = document.getElementById("new-item-image");
+      const reader = new FileReader();
+
+      if (!name || !description || !price || !imageInput.files[0]) {
+        alert("Molimo ispunite sva polja i odaberite sliku.");
+        return;
+      }
+
+      reader.onload = function (e) {
+        menuItems.push({ category, name, description, price, image: e.target.result });
+        localStorage.setItem("menuItems", JSON.stringify(menuItems));
+        renderMenu();
+        document.getElementById("add-item-modal").style.display = "none";
+      };
+
+      reader.readAsDataURL(imageInput.files[0]);
+    });
+
+    document.addEventListener("click", function (event) {
+      if (event.target.classList.contains("remove-item")) {
+        const itemName = event.target.dataset.name;
+        menuItems = menuItems.filter(item => item.name !== itemName);
+        localStorage.setItem("menuItems", JSON.stringify(menuItems));
+        renderMenu();
+      }
+    });
+  }
+
+  document.getElementById("cancel-item-btn").addEventListener("click", function () {
+    document.getElementById("add-item-modal").style.display = "none";
+  });
+
+  document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("add-to-cart")) {
+      const name = event.target.dataset.name;
+      const price = parseFloat(event.target.dataset.price);
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push({ name, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert("Proizvod dodan u košaricu!");
+    }
+  });
+});
+
+  // Provjera korisničke prijave kada korisnik klikne na Povijest Narudžbi
 document.querySelector('a[href="povjest.html"]').addEventListener('click', function (event) {
   const loggedInUser = localStorage.getItem("loggedInUser");
 
@@ -692,6 +720,8 @@ document.querySelector('a[href="povjest.html"]').addEventListener('click', funct
     window.location.href = "login.html";
   });
   
+
+
     // Funkcija koja pokazuje padajući izbornik za odabir priloga
 const addToCartButtons = document.querySelectorAll('.add-to-cart');
 
